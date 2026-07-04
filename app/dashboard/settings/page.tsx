@@ -96,7 +96,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <label className="block text-sm text-muted mb-1.5">
-                  New password <span className="text-faint">— at least 10 characters</span>
+                  New password <span className="text-faint">,  at least 10 characters</span>
                 </label>
                 <input
                   type="password"

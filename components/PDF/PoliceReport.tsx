@@ -101,8 +101,8 @@ export function PoliceReport({ interview, caseData, officerName }: PoliceReportP
       <Page size="A4" style={styles.page}>
         <View style={styles.header}>
           <View>
-            <Text style={styles.title}>THEMIS — INTERNAL POLICE REPORT</Text>
-            <Text style={styles.confidential}>CONFIDENTIAL — NOT FOR COURT SUBMISSION</Text>
+            <Text style={styles.title}>THEMIS, INTERNAL POLICE REPORT</Text>
+            <Text style={styles.confidential}>CONFIDENTIAL, NOT FOR COURT SUBMISSION</Text>
           </View>
           <View>
             <Text style={styles.body}>Case: {caseData.caseNumber}</Text>
@@ -132,9 +132,9 @@ export function PoliceReport({ interview, caseData, officerName }: PoliceReportP
             {interview.escalation.map((e, i) => (
               <View key={i} style={styles.contradictionRow}>
                 <Text style={{ fontFamily: 'Helvetica-Bold', fontSize: 9 }}>
-                  {new Date(e.at).toLocaleString()} — distress: {e.distressLevel}
-                  {e.ongoingDanger ? ' — ONGOING DANGER REPORTED' : ''}
-                  {e.selfHarmRisk ? ' — SELF-HARM RISK' : ''}
+                  {new Date(e.at).toLocaleString()}, distress: {e.distressLevel}
+                  {e.ongoingDanger ? ', ONGOING DANGER REPORTED' : ''}
+                  {e.selfHarmRisk ? ', SELF-HARM RISK' : ''}
                 </Text>
                 <Text style={styles.body}>{e.reason}</Text>
               </View>
@@ -153,7 +153,7 @@ export function PoliceReport({ interview, caseData, officerName }: PoliceReportP
         ))}
         {witnessStatements.length > 12 && (
           <Text style={[styles.body, { color: '#555' }]}>
-            ({witnessStatements.length - 12} additional responses — see full transcript)
+            ({witnessStatements.length - 12} additional responses, see full transcript)
           </Text>
         )}
 

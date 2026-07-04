@@ -11,6 +11,7 @@ export default function SiteFooter() {
             <p className="text-faint text-xs mt-2">Structured witness interviews for investigators.</p>
           </div>
           <nav className="grid grid-cols-2 sm:flex gap-x-8 gap-y-2 text-sm">
+            <Link href="/research" className="text-muted hover:text-ink transition-colors">Design notes</Link>
             <Link href="/methodology" className="text-muted hover:text-ink transition-colors">Methodology</Link>
             <Link href="/security" className="text-muted hover:text-ink transition-colors">Security</Link>
             <Link href="/contact" className="text-muted hover:text-ink transition-colors">Contact</Link>

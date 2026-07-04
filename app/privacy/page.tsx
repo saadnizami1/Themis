@@ -1,6 +1,6 @@
 import PageShell, { Section } from '@/components/Site/PageShell';
 
-export const metadata = { title: 'Privacy Notice — Themis' };
+export const metadata = { title: 'Privacy Notice | Themis' };
 
 export default function PrivacyPage() {
   return (

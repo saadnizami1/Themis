@@ -341,7 +341,7 @@ export default function InterviewPage() {
           <p className={`text-amber-800 text-xs bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 ${urduCls}`}>
             {lang === 'ur'
               ? 'اس براؤزر میں آواز سے جواب دینا دستیاب نہیں۔ آپ اپنے جوابات ٹائپ کر سکتے ہیں۔'
-              : "Voice input isn't available in this browser. You can type your answers — questions will still be spoken aloud."}
+              : "Voice input isn't available in this browser. You can type your answers, questions will still be spoken aloud."}
           </p>
         )}
         <p className={`text-faint text-xs ${urduCls}`}>{t(lang, 'micPermission')}</p>
@@ -517,8 +517,8 @@ export default function InterviewPage() {
           <div className="bg-red-50 border border-red-200 rounded-xl px-4 py-3 flex items-center justify-between gap-3">
             <p className="text-red-900 text-sm">
               {lang === 'ur'
-                ? 'رابطے میں مسئلہ ہوا۔ کچھ ضائع نہیں ہوا — دوبارہ کوشش کریں۔'
-                : 'Connection problem. Nothing was lost — please retry.'}
+                ? 'رابطے میں مسئلہ ہوا۔ کچھ ضائع نہیں ہوا, دوبارہ کوشش کریں۔'
+                : 'Connection problem. Nothing was lost, please retry.'}
             </p>
             <button
               onClick={retryLastEvent}

@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
   if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  // The demo account is shared and public — its password cannot be changed.
+  // The demo account is shared and public, its password cannot be changed.
   if (session.user.email === 'demo@themis.app') {
     return NextResponse.json({ error: 'The demo account cannot be modified' }, { status: 403 });
   }

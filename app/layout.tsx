@@ -11,7 +11,7 @@ const urdu = Noto_Nastaliq_Urdu({
 });
 
 export const metadata: Metadata = {
-  title: 'Themis — Structured witness interviews',
+  title: 'Themis | Structured witness interviews',
   description:
     'Themis conducts recorded victim and witness interviews for investigators using the NICHD protocol. Every question is screened before it is asked.',
 };

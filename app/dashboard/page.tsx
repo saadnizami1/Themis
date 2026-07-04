@@ -131,7 +131,7 @@ export default function DashboardPage() {
             <div key={s.label} className="bg-white rounded-xl border border-line p-4">
               <p className="text-xs text-faint uppercase tracking-wide">{s.label}</p>
               <p className={`text-2xl font-semibold mt-1 ${s.cls}`}>
-                {cases === null ? '–' : s.value}
+                {cases === null ? '-' : s.value}
               </p>
             </div>
           ))}
@@ -181,7 +181,7 @@ export default function DashboardPage() {
 
             <div>
               <label className="block text-sm text-muted mb-1.5">
-                Description <span className="text-faint">— context for the interviewer, never shown to the witness</span>
+                Description <span className="text-faint">,  context for the interviewer, never shown to the witness</span>
               </label>
               <textarea
                 value={description}
@@ -195,7 +195,7 @@ export default function DashboardPage() {
 
             <div>
               <label className="block text-sm text-muted mb-1.5">
-                Report PDF <span className="text-faint">— optional</span>
+                Report PDF <span className="text-faint">,  optional</span>
               </label>
               <input
                 type="file"

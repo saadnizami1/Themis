@@ -72,7 +72,7 @@ export default function ReportViewer({ interview }: ReportViewerProps) {
 
   return (
     <div className="space-y-5">
-      {/* Escalation record — never buried in a tab */}
+      {/* Escalation record, never buried in a tab */}
       {escalation.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-5">
           <h3 className="text-red-900 font-medium text-sm mb-3">Safety escalation record</h3>
@@ -111,7 +111,7 @@ export default function ReportViewer({ interview }: ReportViewerProps) {
         <div className="bg-white rounded-xl p-4 border border-line">
           <p className="text-xs text-faint uppercase tracking-wide">Consistency</p>
           <p className="text-2xl font-semibold text-ink mt-1">
-            {analysis?.overallConsistencyScore ?? '–'}
+            {analysis?.overallConsistencyScore ?? '-'}
             <span className="text-sm text-faint font-normal">/100</span>
           </p>
         </div>
@@ -277,7 +277,7 @@ export default function ReportViewer({ interview }: ReportViewerProps) {
         <div className="bg-white rounded-xl border border-line p-5">
           <p className="text-faint text-xs mb-4">
             Turn-by-turn notes recorded by the interviewer during the session. Internal work
-            product — not part of the court report.
+            product, not part of the court report.
           </p>
           {liveNotes.length === 0 ? (
             <p className="text-muted text-sm">No observations recorded.</p>

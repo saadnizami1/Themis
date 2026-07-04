@@ -6,6 +6,7 @@ import { Wordmark } from '@/components/Brand';
 import DemoButton from './DemoButton';
 
 const links = [
+  { href: '/research', label: 'Design notes' },
   { href: '/methodology', label: 'Methodology' },
   { href: '/security', label: 'Security' },
   { href: '/contact', label: 'Contact' },

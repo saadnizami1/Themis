@@ -8,8 +8,7 @@ import type { TranscriptEntry } from '@/lib/interview-engine';
 
 // Finalize an interview: run the full linguistic analysis pipeline and set
 // the final status. Called by the witness client after the closing message
-// (completed), an early stop (terminated), or a safety hold (escalated —
-// status is preserved, analysis still runs so nothing is lost).
+// (completed), an early stop (terminated), or a safety hold (escalated, // status is preserved, analysis still runs so nothing is lost).
 export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -50,7 +49,7 @@ export async function POST(
     .map((t) => t.filter((e) => e.role !== 'event'));
 
   // Run the analysis pipeline. If the AI provider is down or rate-limited,
-  // the interview must still finalize — the officer can regenerate analysis
+  // the interview must still finalize, the officer can regenerate analysis
   // later, but a witness's completed interview may never be left dangling.
   let analysis;
   let followUpQuestions: string[] = [];
@@ -62,7 +61,7 @@ export async function POST(
       language: interview.language,
     });
     followUpQuestions = await generateFollowUpQuestions(transcript, analysis.contradictions);
-    const caseMetadata = `Case ${interview.case.caseNumber} — ${interview.case.incidentType}. Interview ${interview.interviewNumber}.`;
+    const caseMetadata = `Case ${interview.case.caseNumber}, ${interview.case.incidentType}. Interview ${interview.interviewNumber}.`;
     statementSummary = await generateVictimStatementSummary(transcript, caseMetadata);
   } catch (err) {
     console.error('[complete] analysis pipeline failed, finalizing without it:', err);

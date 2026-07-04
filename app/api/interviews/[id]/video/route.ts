@@ -17,7 +17,7 @@ async function authorizeWitness(id: string, token: string | null) {
 }
 
 // Step 1 (production): mint a signed URL so the browser uploads the recording
-// directly to Supabase Storage — recordings never pass through the serverless
+// directly to Supabase Storage, recordings never pass through the serverless
 // function (which caps request bodies at ~4.5 MB).
 export async function PUT(
   req: NextRequest,
@@ -31,7 +31,7 @@ export async function PUT(
   const key = `${params.id}-${Date.now()}.webm`;
   const signed = await createSignedUpload('videos', key);
   if (!signed) {
-    // Supabase not configured (local dev) — client should POST the blob instead
+    // Supabase not configured (local dev), client should POST the blob instead
     return NextResponse.json({ mode: 'proxy' });
   }
   return NextResponse.json({ mode: 'direct', signedUrl: signed.signedUrl, storedPath: signed.storedPath });

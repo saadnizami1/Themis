@@ -8,7 +8,7 @@ const english = {
   selectLanguage: 'Select language',
   consentTitle: 'Before we begin',
   consentText:
-    'This interview will be recorded (audio, video, and transcript). Your responses will be used only for the purposes of this investigation and reviewed by the investigating officer. The interviewer is an AI system — no human is listening live. You have the right to take a break or stop at any time: just say so. Do you consent to proceed?',
+    'This interview will be recorded (audio, video, and transcript). Your responses will be used only for the purposes of this investigation and reviewed by the investigating officer. The interviewer is an AI system and no human is listening live. You have the right to take a break or stop at any time: just say so. Do you consent to proceed?',
   consentCheckbox: 'I understand and consent to this interview',
   consentTerms: 'I have read and accept the Terms of Use and Privacy Notice',
   beginInterview: 'Begin Interview',
@@ -21,7 +21,7 @@ const english = {
   phase: 'Phase',
   of: 'of',
   aiSpeaking: 'Themis is speaking…',
-  listeningLabel: 'Listening — take your time',
+  listeningLabel: 'Listening, take your time',
   thinkingLabel: 'Thinking…',
   doneAnswering: "I've finished answering",
   typeFallback: 'Prefer to type? Write your answer here…',
@@ -38,7 +38,7 @@ const english = {
   escalationMessage:
     'You did nothing wrong. Based on what you shared, we want to make sure you get support from a person right away. The investigating officer has been notified.',
   escalationDanger: 'If you are in immediate danger, contact emergency services now:',
-  escalationOfficer: 'Otherwise, please contact your investigating officer, or simply stay on this page — your information has been saved.',
+  escalationOfficer: 'Otherwise, please contact your investigating officer, or simply stay on this page. Your information has been saved.',
   emergencyNumbers: 'Emergency: 15 (Police) · 1122 (Rescue)',
   thankYouTitle: 'Thank you',
   thankYouMessage:
@@ -69,7 +69,7 @@ const urdu: typeof english = {
   selectLanguage: 'زبان منتخب کریں',
   consentTitle: 'شروع کرنے سے پہلے',
   consentText:
-    'یہ انٹرویو ریکارڈ کیا جائے گا (آڈیو، ویڈیو، اور متن)۔ آپ کے جوابات صرف اس تحقیقات کے لیے استعمال ہوں گے اور تفتیشی افسر ان کا جائزہ لے گا۔ انٹرویو لینے والا ایک AI نظام ہے — کوئی انسان براہِ راست نہیں سن رہا۔ آپ کو کسی بھی وقت وقفہ لینے یا رکنے کا پورا حق ہے: بس کہہ دیں۔ کیا آپ آگے بڑھنے کی اجازت دیتے ہیں؟',
+    'یہ انٹرویو ریکارڈ کیا جائے گا (آڈیو، ویڈیو، اور متن)۔ آپ کے جوابات صرف اس تحقیقات کے لیے استعمال ہوں گے اور تفتیشی افسر ان کا جائزہ لے گا۔ انٹرویو لینے والا ایک AI نظام ہے اور کوئی انسان براہِ راست نہیں سن رہا۔ آپ کو کسی بھی وقت وقفہ لینے یا رکنے کا پورا حق ہے: بس کہہ دیں۔ کیا آپ آگے بڑھنے کی اجازت دیتے ہیں؟',
   consentCheckbox: 'میں سمجھتا/سمجھتی ہوں اور اس انٹرویو کے لیے رضامند ہوں',
   consentTerms: 'میں نے شرائطِ استعمال اور رازداری کا نوٹس پڑھ کر قبول کیا ہے',
   beginInterview: 'انٹرویو شروع کریں',
@@ -82,7 +82,7 @@ const urdu: typeof english = {
   phase: 'مرحلہ',
   of: 'میں سے',
   aiSpeaking: 'Themis بول رہا ہے…',
-  listeningLabel: 'سن رہا ہوں — اپنا وقت لیں',
+  listeningLabel: 'سن رہا ہوں، اپنا وقت لیں',
   thinkingLabel: 'سوچ رہا ہوں…',
   doneAnswering: 'میں نے جواب مکمل کر لیا',
   typeFallback: 'ٹائپ کرنا چاہتے ہیں؟ یہاں اپنا جواب لکھیں…',
@@ -99,7 +99,7 @@ const urdu: typeof english = {
   escalationMessage:
     'آپ نے کچھ غلط نہیں کیا۔ آپ کی بات سن کر ہم چاہتے ہیں کہ آپ کو فوری طور پر کسی انسان سے مدد ملے۔ تفتیشی افسر کو اطلاع دے دی گئی ہے۔',
   escalationDanger: 'اگر آپ فوری خطرے میں ہیں تو ابھی ایمرجنسی سروس سے رابطہ کریں:',
-  escalationOfficer: 'ورنہ براہ کرم اپنے تفتیشی افسر سے رابطہ کریں، یا اسی صفحے پر رہیں — آپ کی معلومات محفوظ کر لی گئی ہیں۔',
+  escalationOfficer: 'ورنہ براہ کرم اپنے تفتیشی افسر سے رابطہ کریں، یا اسی صفحے پر رہیں۔ آپ کی معلومات محفوظ کر لی گئی ہیں۔',
   emergencyNumbers: 'ایمرجنسی: 15 (پولیس) · 1122 (ریسکیو)',
   thankYouTitle: 'شکریہ',
   thankYouMessage:

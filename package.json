@@ -19,15 +19,12 @@
     "@supabase/storage-js": "^2.109.0",
     "bcryptjs": "^3.0.2",
     "groq-sdk": "^1.3.0",
-    "next": "14.2.30",
+    "next": "^14.2.35",
     "next-auth": "^4.24.11",
     "pdf-parse": "^1.1.1",
     "react": "^18",
     "react-dom": "^18",
     "uuid": "^11.1.0"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",

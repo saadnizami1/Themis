@@ -1,6 +1,6 @@
 import PageShell, { Section } from '@/components/Site/PageShell';
 
-export const metadata = { title: 'Terms of Use — Themis' };
+export const metadata = { title: 'Terms of Use | Themis' };
 
 export default function TermsPage() {
   return (
@@ -37,8 +37,8 @@ export default function TermsPage() {
         <ul>
           <li>take a break (&quot;I need a break&quot;);</li>
           <li>have a question repeated or rephrased;</li>
-          <li>decline to answer — &quot;I don&apos;t know&quot; is always acceptable;</li>
-          <li>stop the interview entirely (&quot;I want to stop&quot;) — a partial interview is never held against a participant;</li>
+          <li>decline to answer, &quot;I don&apos;t know&quot; is always acceptable;</li>
+          <li>stop the interview entirely (&quot;I want to stop&quot;), a partial interview is never held against a participant;</li>
           <li>use English or Urdu.</li>
         </ul>
         <p>
@@ -59,7 +59,7 @@ export default function TermsPage() {
 
       <Section title="5. Analysis is not evidence of truth or deception">
         <p>
-          Themis produces computational linguistic indicators — patterns such as hedging,
+          Themis produces computational linguistic indicators, patterns such as hedging,
           specificity, and cross-interview contradiction. They are not lie detection, clinical
           findings, or credibility determinations. Officers and downstream readers must treat all
           output as an investigative aid requiring independent professional review. Themis output

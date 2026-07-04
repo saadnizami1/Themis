@@ -116,8 +116,8 @@ export function CourtReport({ interview, caseData, officerName, totalInterviews 
       <Page size="A4" style={styles.page}>
         {/* Cover */}
         <View style={styles.cover}>
-          <Text style={styles.title}>THEMIS — FORENSIC INTERVIEW REPORT</Text>
-          <Text style={styles.subtitle}>FOR COURT USE — CONFIDENTIAL</Text>
+          <Text style={styles.title}>THEMIS, FORENSIC INTERVIEW REPORT</Text>
+          <Text style={styles.subtitle}>FOR COURT USE, CONFIDENTIAL</Text>
           <Text style={styles.body}>Case Number: {caseData.caseNumber}</Text>
           <Text style={styles.body}>Incident Type: {caseData.incidentType}</Text>
           <Text style={styles.body}>
@@ -175,7 +175,7 @@ export function CourtReport({ interview, caseData, officerName, totalInterviews 
           analysis.linguisticFlags.map((flag, i) => (
             <View key={i} style={styles.flagRow}>
               <Text style={{ fontFamily: 'Helvetica-Bold', fontSize: 9 }}>
-                {flag.type.replace(/_/g, ' ')} — {flag.severity.toUpperCase()}
+                {flag.type.replace(/_/g, ' ')}, {flag.severity.toUpperCase()}
               </Text>
               <Text style={styles.body}>Evidence: &quot;{flag.evidence}&quot;</Text>
               <Text style={styles.body}>Note: {flag.note}</Text>
@@ -192,7 +192,7 @@ export function CourtReport({ interview, caseData, officerName, totalInterviews 
             {contradictions.map((c, i) => (
               <View key={i} style={styles.contradictionRow}>
                 <Text style={{ fontFamily: 'Helvetica-Bold', fontSize: 9 }}>
-                  {c.topic} — {c.severity.toUpperCase()}
+                  {c.topic}, {c.severity.toUpperCase()}
                 </Text>
                 <Text style={styles.body}>Interview 1 stated: &quot;{c.claim_interview_1}&quot;</Text>
                 <Text style={styles.body}>Interview 2 stated: &quot;{c.claim_interview_2}&quot;</Text>

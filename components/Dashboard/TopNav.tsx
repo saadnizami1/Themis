@@ -18,7 +18,7 @@ export default function TopNav({ crumbs = [] }: { crumbs?: Crumb[] }) {
       {isDemo && (
         <div className="bg-accent-soft border-b border-accent-border px-5 py-2 text-center">
           <p className="text-accent text-xs">
-            Demo workspace — shared sample data, cleared periodically. Do not enter real case information.
+            Demo workspace, shared sample data, cleared periodically. Do not enter real case information.
           </p>
         </div>
       )}

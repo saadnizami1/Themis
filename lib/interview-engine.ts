@@ -243,8 +243,8 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
     const message =
       decision.question ||
       (language === 'ur'
-        ? 'ہم یہیں رکتے ہیں۔ آپ نے بہت اچھا کیا۔ آپ کی حفاظت سب سے اہم ہے — مدد کا بندوبست کیا جا رہا ہے۔'
-        : "We're going to pause here. You've done well. Your safety comes first — help is being arranged.");
+        ? 'ہم یہیں رکتے ہیں۔ آپ نے بہت اچھا کیا۔ آپ کی حفاظت سب سے اہم ہے۔ مدد کا بندوبست کیا جا رہا ہے۔'
+        : "We're going to pause here. You've done well. Your safety comes first, and help is being arranged.");
     const events = ((interview.escalation as unknown as EscalationEvent[]) || []).slice();
     events.push({
       at: now(),
@@ -295,7 +295,7 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
       decision.question ||
       (language === 'ur'
         ? 'بالکل، ہم وقفہ لیتے ہیں۔ جب آپ تیار ہوں تو جاری رکھیں گے۔'
-        : "Of course — let's take a break. We'll continue whenever you're ready.");
+        : "Of course, let's take a break. We'll continue whenever you're ready.");
     transcript.push({ role: 'ai', content: message, phase: phaseId, timestamp: now() });
     transcript.push({ role: 'event', content: 'break', phase: phaseId, timestamp: now() });
     await prisma.interview.update({

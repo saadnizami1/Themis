@@ -6,7 +6,7 @@ import type { Lang } from '@/lib/translations';
 // Echo-proof speech engine.
 //
 // The cardinal rule: the microphone is NEVER open while Themis is speaking.
-// TTS and STT are strictly sequenced — speak() hard-stops recognition first,
+// TTS and STT are strictly sequenced, speak() hard-stops recognition first,
 // and listening only begins after the utterance's onend fires (plus a small
 // grace period so the tail of the TTS audio can't leak into the mic).
 
@@ -101,7 +101,7 @@ export function useSpeech({
 
     if (!SR) {
       // No speech recognition (e.g. iOS). Enter listening state anyway so the
-      // typed answer field and submit button work — TTS still speaks questions.
+      // typed answer field and submit button work, TTS still speaks questions.
       stopListening();
       finalRef.current = '';
       setBuffer('');
@@ -132,7 +132,7 @@ export function useSpeech({
       }
 
       if (newFinal) {
-        // Local voice command: "repeat the question" — instant, no server trip
+        // Local voice command: "repeat the question", instant, no server trip
         if (!finalRef.current.trim() && REPEAT_PATTERNS.some((p) => p.test(newFinal))) {
           stopListening();
           callbacksRef.current.onRepeatCommand();
@@ -144,7 +144,7 @@ export function useSpeech({
       }
       setInterim(interimText);
       if (interimText && silenceTimerRef.current) {
-        // Witness resumed speaking — hold the auto-submit
+        // Witness resumed speaking, hold the auto-submit
         clearTimeout(silenceTimerRef.current);
         silenceTimerRef.current = null;
       }
@@ -190,7 +190,7 @@ export function useSpeech({
 
       if (!('speechSynthesis' in window)) {
         setTtsSupported(false);
-        // No TTS — go straight to listening so the interview still works
+        // No TTS, go straight to listening so the interview still works
         if (opts?.thenListen) startListening();
         else setStateBoth('idle');
         opts?.onDone?.();

@@ -105,7 +105,7 @@ async function main() {
     },
   });
 
-  // Demo account — recreated sample data on every seed run
+  // Demo account, recreated sample data on every seed run
   const demoHash = await bcrypt.hash('themis-demo', 12);
   const demo = await prisma.user.upsert({
     where: { email: 'demo@themis.app' },

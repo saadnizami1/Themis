@@ -39,7 +39,7 @@ export default function EscalationBanner() {
       <div className="flex items-center gap-2 mb-3">
         <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
         <h2 className="text-red-900 font-medium text-sm">
-          Safety escalation{alerts.length > 1 ? 's' : ''} — review required
+          Safety escalation{alerts.length > 1 ? 's' : ''}, review required
         </h2>
       </div>
       <div className="space-y-2">
