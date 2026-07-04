@@ -289,7 +289,7 @@ export default function InterviewPage() {
   const urduCls = isRTL ? 'font-urdu' : '';
 
   const centered = (content: React.ReactNode) => (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-5" {...dirProps}>
+    <div className="min-h-screen bg-paper flex items-center justify-center p-5" {...dirProps}>
       {content}
     </div>
   );
@@ -440,7 +440,7 @@ export default function InterviewPage() {
       : t(lang, 'thinkingLabel');
 
   return (
-    <div className="min-h-screen bg-surface flex flex-col" {...dirProps}>
+    <div className="min-h-screen bg-paper flex flex-col" {...dirProps}>
       <header className="border-b border-line bg-white px-5 py-3">
         <div className="max-w-2xl mx-auto flex items-center gap-5">
           <p className="text-ink text-sm font-semibold tracking-tight shrink-0">Themis</p>

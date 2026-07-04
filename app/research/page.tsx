@@ -11,15 +11,15 @@ export const metadata = {
 
 function H2({ n, children }: { n: string; children: React.ReactNode }) {
   return (
-    <h2 className="text-2xl font-semibold tracking-tight mt-16 mb-5 flex items-baseline gap-4">
-      <span className="text-faint text-base tabular-nums shrink-0">{n}</span>
+    <h2 className="font-serif text-3xl tracking-tight mt-16 mb-5 flex items-baseline gap-4">
+      <span className="font-mono text-faint text-sm tabular-nums shrink-0">{n}</span>
       {children}
     </h2>
   );
 }
 
 function H3({ children }: { children: React.ReactNode }) {
-  return <h3 className="text-lg font-semibold tracking-tight mt-10 mb-3">{children}</h3>;
+  return <h3 className="font-serif text-xl tracking-tight mt-10 mb-3">{children}</h3>;
 }
 
 function P({ children }: { children: React.ReactNode }) {
@@ -29,7 +29,7 @@ function P({ children }: { children: React.ReactNode }) {
 function Figure({ caption, children }: { caption: string; children: React.ReactNode }) {
   return (
     <figure className="my-8">
-      <div className="border border-line rounded-2xl bg-surface/60 p-6 sm:p-8 overflow-x-auto">
+      <div className="border border-line bg-white p-6 sm:p-8 overflow-x-auto">
         {children}
       </div>
       <figcaption className="text-faint text-xs mt-3 text-center">{caption}</figcaption>
@@ -54,23 +54,25 @@ const categories = [
 
 export default function ResearchPage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-paper flex flex-col">
       <SiteHeader />
 
       <main className="flex-1 w-full max-w-3xl mx-auto px-5 py-14 sm:py-20">
         {/* Paper header */}
         <Reveal>
-          <p className="text-accent text-xs font-semibold uppercase tracking-widest">Design notes</p>
-          <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight mt-4 leading-tight">
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">Design notes</p>
+          <h1 className="font-serif text-4xl sm:text-6xl tracking-tight mt-4 leading-[1.06]">
             Designing an AI interviewer that cannot lead the witness
           </h1>
-          <p className="text-faint text-sm mt-5">Themis pilot programme · July 2026 · 12 minute read</p>
+          <p className="font-mono text-[11px] tracking-[0.04em] text-faint mt-6">
+            Themis pilot programme · July 2026 · 12 minute read
+          </p>
         </Reveal>
 
         {/* Abstract */}
         <Reveal delay={100}>
-          <div className="mt-10 rounded-2xl border border-line bg-surface/60 p-6 sm:p-8">
-            <p className="text-xs font-semibold uppercase tracking-widest text-faint mb-3">Abstract</p>
+          <div className="mt-10 border border-line bg-white p-6 sm:p-8">
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint mb-3">Abstract</p>
             <p className="text-sm text-ink/80 leading-relaxed">
               Investigative interviews shape the evidence they collect. Decades of research show
               that small changes in question wording alter what witnesses remember and report,

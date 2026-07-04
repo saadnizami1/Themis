@@ -7,10 +7,17 @@
     color-scheme: light;
   }
   body {
-    @apply bg-white text-ink antialiased;
+    @apply bg-paper text-ink antialiased;
   }
   ::selection {
     @apply bg-accent-soft text-ink;
+  }
+}
+
+/* Small-caps metadata label used across the app. */
+@layer components {
+  .meta-label {
+    @apply font-mono text-[11px] uppercase tracking-[0.14em] text-faint;
   }
 }
 
@@ -22,9 +29,9 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d7dae0;
+  background: #d9d5cb;
   border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #b9bec8;
+  background: #beb9ac;
 }

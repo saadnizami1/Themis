@@ -3,14 +3,16 @@ import { Wordmark } from '@/components/Brand';
 
 export default function SiteFooter() {
   return (
-    <footer className="border-t border-line bg-surface">
-      <div className="max-w-6xl mx-auto px-5 py-10">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+    <footer className="border-t border-line bg-paper">
+      <div className="max-w-6xl mx-auto px-5 py-12">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-8">
           <div>
             <Wordmark textClass="text-base" markClass="w-5 h-5" />
-            <p className="text-faint text-xs mt-2">Structured witness interviews for investigators.</p>
+            <p className="font-mono text-[11px] tracking-[0.04em] text-faint mt-3">
+              Structured witness interviews for investigators.
+            </p>
           </div>
-          <nav className="grid grid-cols-2 sm:flex gap-x-8 gap-y-2 text-sm">
+          <nav className="grid grid-cols-2 sm:flex gap-x-8 gap-y-2.5 text-[13px]">
             <Link href="/research" className="text-muted hover:text-ink transition-colors">Design notes</Link>
             <Link href="/methodology" className="text-muted hover:text-ink transition-colors">Methodology</Link>
             <Link href="/security" className="text-muted hover:text-ink transition-colors">Security</Link>
@@ -20,11 +22,13 @@ export default function SiteFooter() {
             <Link href="/login" className="text-muted hover:text-ink transition-colors">Sign in</Link>
           </nav>
         </div>
-        <p className="text-faint text-xs mt-8 leading-relaxed max-w-3xl">
-          Themis produces computational indicators for professional review. It does not determine
-          truthfulness or deception, and its output must be reviewed by qualified forensic
-          professionals before investigative or legal use.
-        </p>
+        <div className="mt-10 pt-6 border-t border-line">
+          <p className="text-faint text-xs leading-relaxed max-w-3xl">
+            Themis produces computational indicators for professional review. It does not determine
+            truthfulness or deception, and its output must be reviewed by qualified forensic
+            professionals before investigative or legal use.
+          </p>
+        </div>
       </div>
     </footer>
   );

@@ -123,7 +123,7 @@ export async function runTurn(interviewId: string, event: TurnEvent): Promise<Tu
 
   // ── Resume after a break or dropped session: re-ask the pending question ──
   if (event.type === 'resume') {
-    // Skip break/stop acknowledgments — find the last substantive question.
+    // Skip break/stop acknowledgments; find the last substantive question.
     let lastQuestion = '';
     for (let i = transcript.length - 1; i >= 0; i--) {
       const entry = transcript[i];
@@ -154,7 +154,7 @@ export async function runTurn(interviewId: string, event: TurnEvent): Promise<Tu
   );
 
   // Case context for the model (never shown to witness). Report text was
-  // extracted once at upload time — no file I/O in the turn path.
+  // extracted once at upload time; no file I/O in the turn path.
   const reportText = interview.case.reportText || '';
   const caseContext = `Case: ${interview.case.caseNumber}
 Incident type: ${interview.case.incidentType}
@@ -227,7 +227,7 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
 
   // ── Safety override: escalation beats everything ──
   // Exception: a witness calmly exercising their right to stop is not an
-  // emergency — models sometimes mislabel it "critical". Danger and self-harm
+  // emergency; models sometimes mislabel it "critical". Danger and self-harm
   // remain absolute triggers even mid-stop.
   const isStopFlow =
     decision.intent === 'stop_request' ||
@@ -309,7 +309,7 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
     return { action: 'break', utterance: message, phaseId, phaseIndex, status: 'in_progress' };
   }
 
-  // ── Confirm stop (witness asked to end — confirm once, without pressure) ──
+  // ── Confirm stop (witness asked to end; confirm once, without pressure) ──
   if (action === 'confirm_stop') {
     const message =
       decision.question ||
@@ -360,7 +360,7 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
   if (action === 'advance_phase') {
     const nextId = getNextPhase(phaseId);
     if (!nextId) {
-      // No next phase (we're in closing) — end gracefully
+      // No next phase (we're in closing); end gracefully
       const message =
         language === 'ur'
           ? 'آپ کے وقت اور ہمت کا بہت شکریہ۔ انٹرویو مکمل ہو گیا ہے۔'
@@ -407,7 +407,7 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
     };
   }
 
-  // ── Ask (the normal case) — validator gate before anything is spoken ──
+  // ── Ask (the normal case); validator gate before anything is spoken ──
   let question = decision.question?.trim() || fallbackProbe(language);
   try {
     question = await validateAndRefine(

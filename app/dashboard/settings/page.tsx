@@ -50,7 +50,7 @@ export default function SettingsPage() {
     'w-full bg-white border border-line rounded-lg px-4 py-2.5 text-ink text-sm focus:border-accent outline-none transition-colors';
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-paper">
       <TopNav crumbs={[{ label: 'Settings' }]} />
 
       <div className="max-w-xl mx-auto px-5 py-6 sm:py-8 space-y-5">

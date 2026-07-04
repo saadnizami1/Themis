@@ -30,7 +30,7 @@ export default function DemoButton({ className = '' }: { className?: string }) {
       disabled={loading}
       className={
         className ||
-        'px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60'
+        'px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-sm transition-colors disabled:opacity-60'
       }
     >
       {loading ? 'Opening demo…' : 'Try the demo'}

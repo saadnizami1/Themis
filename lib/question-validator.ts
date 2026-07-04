@@ -33,7 +33,7 @@ export async function validateQuestion(
     parsed ?? {
       safe: true,
       flags: [],
-      reason: 'Validation parse error — defaulting to safe',
+      reason: 'Validation parse error; defaulting to safe',
       suggested_rewrite: question,
     }
   );
@@ -66,7 +66,7 @@ export async function validateAndRefine(
     if (rewrite && rewrite !== candidate) {
       candidate = rewrite;
     } else {
-      // No useful rewrite — return original and log
+      // No useful rewrite; return original and log
       console.warn('[QuestionValidator] Could not produce safe rewrite:', result);
       return candidate;
     }

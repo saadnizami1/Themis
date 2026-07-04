@@ -64,7 +64,7 @@ export default function InterviewReportPage() {
 
   if (!interview) {
     return (
-      <div className="min-h-screen bg-surface">
+      <div className="min-h-screen bg-paper">
         <TopNav />
         <div className="max-w-5xl mx-auto px-5 py-8">
           <div className="bg-white border border-line rounded-xl h-32 animate-pulse" />
@@ -74,7 +74,7 @@ export default function InterviewReportPage() {
   }
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-paper">
       <TopNav
         crumbs={[
           { label: interview.case.caseNumber, href: `/dashboard/cases/${interview.case.id}` },

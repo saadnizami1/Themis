@@ -17,12 +17,12 @@ export default function TopNav({ crumbs = [] }: { crumbs?: Crumb[] }) {
     <>
       {isDemo && (
         <div className="bg-accent-soft border-b border-accent-border px-5 py-2 text-center">
-          <p className="text-accent text-xs">
-            Demo workspace, shared sample data, cleared periodically. Do not enter real case information.
+          <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-accent">
+            Demo workspace. Shared sample data, cleared periodically. Do not enter real case information.
           </p>
         </div>
       )}
-      <nav className="border-b border-line bg-white px-5 py-3">
+      <nav className="border-b border-line bg-paper px-5 py-3">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
             <Link href="/dashboard" className="shrink-0">
@@ -62,7 +62,7 @@ export default function TopNav({ crumbs = [] }: { crumbs?: Crumb[] }) {
             )}
             <button
               onClick={() => signOut({ callbackUrl: '/' })}
-              className="px-3 py-1.5 text-muted hover:text-ink text-sm border border-line hover:border-faint rounded-lg transition-colors"
+              className="px-3 py-1.5 text-muted hover:text-ink text-sm border border-line hover:border-faint rounded-sm transition-colors"
             >
               Sign out
             </button>

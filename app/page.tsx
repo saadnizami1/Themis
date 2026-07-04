@@ -3,20 +3,29 @@ import SiteHeader from '@/components/Site/SiteHeader';
 import SiteFooter from '@/components/Site/SiteFooter';
 import DemoButton from '@/components/Site/DemoButton';
 import { Reveal, StickyPanels, Stat } from '@/components/Site/Scroll';
-import { Mark } from '@/components/Brand';
+import { RevealHeading, TextReveal } from '@/components/Site/Motion';
 
-const features = [
+const refusals = [
+  'Mention any detail the witness has not raised themselves.',
+  'Suggest a name, a face, a place, a time, or a weapon.',
+  'Praise, pressure, or reassure a witness toward an answer.',
+  'Interrupt a narrative once it has begun.',
+  'Continue past a disclosure of ongoing danger.',
+  'Overrule a request to pause or to stop.',
+];
+
+const capabilities = [
   {
     title: 'Protocol enforcement',
-    body: 'Six interview phases, from rapport to closing. The software enforces order and pacing, not the interviewer\'s habits.',
+    body: 'Six interview phases, from rapport to closing, in a fixed order. The engine enforces sequence and pacing in code, not by convention.',
   },
   {
     title: 'Question screening',
-    body: 'Every generated question is checked against ten categories of suggestive questioning before it is spoken. Flagged questions are rewritten, not asked.',
+    body: 'Every generated question is checked against ten categories of suggestive questioning before it is spoken. A flagged question is rewritten, not asked.',
   },
   {
     title: 'Safety monitoring',
-    body: 'If a witness discloses ongoing danger or shows acute distress, the interview stops itself and the case officer is alerted within seconds.',
+    body: 'Each answer receives a safety read. A disclosure of ongoing danger stops the interview and alerts the case officer within seconds.',
   },
   {
     title: 'Witness control',
@@ -79,121 +88,206 @@ const pipeline = [
   ['Speak', 'Only then is the question spoken aloud, in the witness\'s language, and the cycle repeats.'],
 ];
 
+function Specimen() {
+  return (
+    <figure className="border border-line bg-white">
+      <figcaption className="flex items-center justify-between px-5 py-3 border-b border-line">
+        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+          Interview record
+        </span>
+        <span className="font-mono text-[11px] tracking-[0.04em] text-faint">
+          FIR-2026-0187 / 02
+        </span>
+      </figcaption>
+      <div className="p-5 sm:p-6 font-mono text-[12.5px] leading-relaxed space-y-4">
+        <div className="grid grid-cols-[4.5rem_1fr] gap-x-4">
+          <span className="text-faint">14:32:06</span>
+          <div>
+            <span className="text-faint uppercase text-[10.5px] tracking-[0.14em]">Themis</span>
+            <p className="text-ink mt-1">
+              You said there was a man near the counter. Tell me everything you remember about him.
+            </p>
+          </div>
+        </div>
+        <div className="grid grid-cols-[4.5rem_1fr] gap-x-4">
+          <span className="text-faint">14:32:41</span>
+          <div>
+            <span className="text-faint uppercase text-[10.5px] tracking-[0.14em]">Witness</span>
+            <p className="text-ink mt-1">
+              He stood close to the register, maybe a metre from it. I could see his hands the
+              whole time.
+            </p>
+          </div>
+        </div>
+        <div className="pt-4 border-t border-line grid grid-cols-[4.5rem_1fr] gap-x-4">
+          <span className="text-accent uppercase text-[10.5px] tracking-[0.14em] pt-0.5">Screen</span>
+          <p className="text-muted text-[12px]">
+            Question passed. No new detail introduced: &quot;the counter&quot; originated with the
+            witness in the free narrative.
+          </p>
+        </div>
+      </div>
+    </figure>
+  );
+}
+
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-white flex flex-col overflow-x-clip">
+    <div className="min-h-screen bg-paper flex flex-col overflow-x-clip">
       <SiteHeader />
 
       {/* Hero */}
-      <section className="relative">
-        {/* Gradient field */}
-        <div aria-hidden className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[80rem] h-[40rem] rounded-full opacity-60 blur-3xl bg-[radial-gradient(closest-side,rgba(29,78,216,0.14),transparent)]" />
-          <div className="absolute top-40 -left-40 w-[40rem] h-[30rem] rounded-full opacity-50 blur-3xl bg-[radial-gradient(closest-side,rgba(59,130,246,0.10),transparent)]" />
-          <div
-            className="absolute inset-0 opacity-[0.35]"
-            style={{
-              backgroundImage:
-                'linear-gradient(to right, rgba(11,15,25,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(11,15,25,0.04) 1px, transparent 1px)',
-              backgroundSize: '56px 56px',
-              maskImage: 'radial-gradient(ellipse 90% 70% at 50% 0%, black, transparent)',
-              WebkitMaskImage: 'radial-gradient(ellipse 90% 70% at 50% 0%, black, transparent)',
-            }}
-          />
-        </div>
-
-        <div className="relative max-w-6xl mx-auto px-5 pt-20 sm:pt-32 pb-20 sm:pb-28">
+      <section className="border-b border-line">
+        <div className="max-w-6xl mx-auto px-5 pt-16 sm:pt-24 pb-16 sm:pb-24">
           <Reveal>
-            <p className="inline-flex items-center gap-2 text-xs text-muted border border-line rounded-full px-3.5 py-1.5 bg-white/70 backdrop-blur">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-              Pilot programme, now taking department enquiries
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+              Pilot programme 2026 &nbsp;/&nbsp; NICHD protocol &nbsp;/&nbsp; English and Urdu
             </p>
           </Reveal>
-          <Reveal delay={80}>
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05] mt-7 max-w-4xl">
-              Witness interviews,
-              <br />
-              <span className="bg-gradient-to-r from-accent via-blue-500 to-accent bg-clip-text text-transparent">
-                done by the book.
-              </span>{' '}
-              Every time.
-            </h1>
-          </Reveal>
-          <Reveal delay={160}>
-            <p className="text-muted text-lg mt-8 leading-relaxed max-w-2xl">
-              Themis is an AI interviewer for police investigations. It follows the NICHD
-              protocol, screens every question before speaking it, and produces court-ready
-              records in English and Urdu.
-            </p>
-          </Reveal>
-          <Reveal delay={240}>
-            <div className="flex flex-col sm:flex-row gap-3 mt-10">
-              <DemoButton className="px-7 py-3.5 bg-accent hover:bg-accent-hover text-white font-medium rounded-xl transition-all hover:shadow-lg hover:shadow-accent/25 text-center" />
-              <Link
-                href="/research"
-                className="px-7 py-3.5 border border-line hover:border-faint text-ink font-medium rounded-xl transition-colors text-center bg-white/70 backdrop-blur"
-              >
-                Read the design notes
-              </Link>
+          <div className="grid lg:grid-cols-[1fr_minmax(0,26rem)] gap-12 lg:gap-16 items-end mt-8">
+            <div>
+              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.04] tracking-tight max-w-3xl">
+                <RevealHeading text="Nothing suggested." stagger={90} />
+                <br />
+                <RevealHeading
+                  text="Everything on the record."
+                  stagger={90}
+                  delay={220}
+                  className="italic"
+                />
+              </h1>
+              <Reveal delay={500}>
+                <p className="text-muted text-lg mt-8 leading-relaxed max-w-xl">
+                  Themis conducts recorded witness interviews for police investigations. It
+                  follows the NICHD protocol, screens every question before speaking it, and
+                  produces court-ready records.
+                </p>
+              </Reveal>
+              <Reveal delay={600}>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-5 mt-10">
+                  <DemoButton className="px-6 py-3 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-sm transition-colors text-center disabled:opacity-60" />
+                  <Link
+                    href="/research"
+                    className="text-sm text-ink border-b border-ink/30 hover:border-ink pb-0.5 transition-colors w-fit"
+                  >
+                    Read the design notes
+                  </Link>
+                </div>
+              </Reveal>
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* Stats band */}
-      <section className="border-y border-line bg-surface/60">
-        <div className="max-w-6xl mx-auto px-5 py-14 grid grid-cols-2 lg:grid-cols-4 gap-10">
-          <Reveal><Stat value={6} label="protocol phases, enforced in code" /></Reveal>
-          <Reveal delay={80}><Stat value={10} label="categories of suggestive questioning screened" /></Reveal>
-          <Reveal delay={160}><Stat value={8} label="linguistic indicators in every analysis" /></Reveal>
-          <Reveal delay={240}><Stat value={2} label="languages, spoken and transcribed" /></Reveal>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className="max-w-6xl mx-auto px-5 py-20 sm:py-28 w-full">
-        <Reveal>
-          <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight max-w-2xl">
-            Built so nothing the system does can contaminate a witness&apos;s memory.
-          </h2>
-        </Reveal>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
-          {features.map((f, i) => (
-            <Reveal key={f.title} delay={(i % 3) * 90}>
-              <div className="group relative rounded-2xl border border-line p-7 h-full bg-white transition-all duration-300 hover:border-accent-border hover:shadow-[0_8px_40px_-12px_rgba(29,78,216,0.15)]">
-                <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <h3 className="font-semibold">{f.title}</h3>
-                <p className="text-muted text-sm mt-3 leading-relaxed">{f.body}</p>
-              </div>
+            <Reveal delay={300} className="hidden lg:block">
+              <Specimen />
+              <p className="text-faint text-xs mt-3">
+                Excerpt from the sample case in the demo workspace.
+              </p>
             </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* Ledger strip */}
+      <section className="border-b border-line bg-white">
+        <div className="max-w-6xl mx-auto grid grid-cols-2 lg:grid-cols-4 divide-x divide-line border-x border-line">
+          {[
+            { value: 6, label: 'protocol phases, order enforced in code' },
+            { value: 10, label: 'categories of suggestive questioning screened' },
+            { value: 8, label: 'linguistic indicators in every analysis' },
+            { value: 2, label: 'languages, spoken and transcribed' },
+          ].map((s, i) => (
+            <div key={s.label} className={`p-8 sm:p-10 ${i > 1 ? 'border-t border-line lg:border-t-0' : ''}`}>
+              <Stat value={s.value} label={s.label} />
+            </div>
           ))}
         </div>
       </section>
 
+      {/* Manifesto: scroll-driven text reveal */}
+      <section className="max-w-5xl mx-auto px-5 w-full">
+        <TextReveal
+          text="A memory is evidence. Handled carelessly, it changes. Themis exists so that nothing in the interview room, no habit, no hunch, no leading question, can alter what a witness remembers."
+          className="font-serif text-3xl sm:text-5xl leading-[1.25] tracking-tight"
+        />
+      </section>
+
+      {/* Refusals */}
+      <section className="border-t border-line">
+        <div className="max-w-6xl mx-auto px-5 py-20 sm:py-28 grid lg:grid-cols-[minmax(0,24rem)_1fr] gap-12 lg:gap-20">
+          <Reveal>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+              By design
+            </p>
+            <h2 className="font-serif text-4xl sm:text-5xl tracking-tight mt-4">
+              Built to refuse.
+            </h2>
+            <p className="text-muted mt-6 leading-relaxed">
+              Most interview errors are not lies. They are suggestions, absorbed and repeated
+              until they sound like memory. So the interviewer&apos;s constraints matter more
+              than its abilities. There are six things it will not do.
+            </p>
+          </Reveal>
+          <div>
+            {refusals.map((r, i) => (
+              <Reveal key={r} delay={i * 60}>
+                <div className="grid grid-cols-[3rem_1fr] gap-4 py-5 border-t border-line items-baseline">
+                  <span className="font-mono text-faint text-sm tabular-nums">0{i + 1}</span>
+                  <p className="text-ink leading-relaxed">{r}</p>
+                </div>
+              </Reveal>
+            ))}
+            <div className="border-t border-line" />
+          </div>
+        </div>
+      </section>
+
+      {/* Capabilities: indexed ruled list */}
+      <section className="border-t border-line bg-white">
+        <div className="max-w-6xl mx-auto px-5 py-20 sm:py-28">
+          <Reveal>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+              The record
+            </p>
+            <h2 className="font-serif text-4xl sm:text-5xl tracking-tight mt-4 max-w-2xl">
+              What a case gets.
+            </h2>
+          </Reveal>
+          <div className="mt-14">
+            {capabilities.map((c, i) => (
+              <Reveal key={c.title} delay={(i % 2) * 60}>
+                <div className="grid sm:grid-cols-[3rem_16rem_1fr] gap-2 sm:gap-6 py-6 border-t border-line items-baseline">
+                  <span className="font-mono text-faint text-sm tabular-nums">0{i + 1}</span>
+                  <h3 className="font-medium">{c.title}</h3>
+                  <p className="text-muted text-sm leading-relaxed max-w-xl">{c.body}</p>
+                </div>
+              </Reveal>
+            ))}
+            <div className="border-t border-line" />
+          </div>
+        </div>
+      </section>
+
       {/* Sticky phase walkthrough */}
-      <div className="border-y border-line bg-surface/40">
+      <div className="border-t border-line">
         <StickyPanels heading="Six phases. One fixed order." panels={phasePanels} />
       </div>
 
       {/* Turn pipeline */}
-      <section className="relative bg-ink text-white overflow-hidden">
-        <div aria-hidden className="absolute inset-0 pointer-events-none">
-          <div className="absolute -bottom-52 left-1/3 w-[60rem] h-[36rem] rounded-full opacity-30 blur-3xl bg-[radial-gradient(closest-side,rgba(59,130,246,0.35),transparent)]" />
-        </div>
-        <div className="relative max-w-6xl mx-auto px-5 py-20 sm:py-28">
+      <section className="bg-ink text-paper">
+        <div className="max-w-6xl mx-auto px-5 py-20 sm:py-28">
           <Reveal>
-            <p className="text-blue-300/80 text-xs font-semibold uppercase tracking-widest">Every single turn</p>
-            <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight mt-3 max-w-2xl">
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-paper/50">
+              Every single turn
+            </p>
+            <h2 className="font-serif text-4xl sm:text-5xl tracking-tight mt-4 max-w-2xl">
               Five checks between hearing an answer and asking the next question.
             </h2>
           </Reveal>
-          <ol className="mt-14 space-y-0">
+          <ol className="mt-14">
             {pipeline.map(([title, body], i) => (
-              <Reveal key={title} delay={i * 80}>
-                <li className="grid sm:grid-cols-[4rem_10rem_1fr] gap-2 sm:gap-6 py-7 border-t border-white/10 items-baseline">
-                  <span className="text-blue-300/60 text-sm tabular-nums">0{i + 1}</span>
-                  <h3 className="text-xl font-semibold">{title}</h3>
-                  <p className="text-white/60 text-sm leading-relaxed max-w-xl">{body}</p>
+              <Reveal key={title} delay={i * 70}>
+                <li className="grid sm:grid-cols-[3rem_10rem_1fr] gap-2 sm:gap-6 py-7 border-t border-white/10 items-baseline">
+                  <span className="font-mono text-paper/40 text-sm tabular-nums">0{i + 1}</span>
+                  <h3 className="font-serif text-2xl">{title}</h3>
+                  <p className="text-paper/60 text-sm leading-relaxed max-w-xl">{body}</p>
                 </li>
               </Reveal>
             ))}
@@ -201,53 +295,55 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Plain statement */}
-      <section className="max-w-3xl mx-auto px-5 py-20 sm:py-28 text-center">
-        <Reveal>
-          <span className="inline-block w-10 h-10 text-ink mb-6"><Mark className="w-10 h-10" /></span>
-          <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
-            No polygraph. No biometrics. No lie detection.
-          </h2>
-          <p className="text-muted mt-5 leading-relaxed">
-            Themis flags linguistic patterns for professional review and always shows positive
-            indicators alongside concerns. Its output is an investigative aid, never a verdict.
-            Recordings are stored privately and served only to the authenticated case officer.
-          </p>
-        </Reveal>
+      {/* Limits */}
+      <section className="border-b border-line">
+        <div className="max-w-6xl mx-auto px-5 py-20 sm:py-24 grid lg:grid-cols-[minmax(0,24rem)_1fr] gap-10 lg:gap-20">
+          <Reveal>
+            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">Limits</p>
+            <h2 className="font-serif text-3xl sm:text-4xl tracking-tight mt-4">
+              No polygraph. No biometrics. No lie detection.
+            </h2>
+          </Reveal>
+          <Reveal delay={100}>
+            <p className="text-muted leading-relaxed max-w-xl lg:pt-10">
+              Themis flags linguistic patterns for professional review and always shows positive
+              indicators alongside concerns. Its output is an investigative aid, never a verdict.
+              Recordings are stored privately and served only to the authenticated case officer.
+            </p>
+          </Reveal>
+        </div>
       </section>
 
       {/* Reading */}
-      <section className="max-w-6xl mx-auto px-5 pb-20 sm:pb-28 w-full">
-        <div className="grid sm:grid-cols-2 gap-4">
+      <section className="max-w-6xl mx-auto px-5 py-16 sm:py-20 w-full">
+        <div className="grid sm:grid-cols-2 border border-line divide-y sm:divide-y-0 sm:divide-x divide-line bg-white">
           <Reveal>
-            <Link
-              href="/research"
-              className="group block rounded-2xl border border-line p-8 h-full bg-gradient-to-br from-white to-accent-soft/50 hover:border-accent-border transition-colors"
-            >
-              <p className="text-accent text-xs font-semibold uppercase tracking-widest">Design notes</p>
-              <h3 className="text-xl font-semibold mt-3">How the AI interviewer is designed</h3>
+            <Link href="/research" className="group block p-8 sm:p-10 h-full hover:bg-surface/60 transition-colors">
+              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+                Design notes
+              </p>
+              <h3 className="font-serif text-2xl mt-3">How the interviewer is designed</h3>
               <p className="text-muted text-sm mt-3 leading-relaxed">
                 The full write-up: the turn engine, the safety model, what the interviewer is
                 forbidden from doing, and why. With references.
               </p>
-              <span className="inline-block text-accent text-sm font-medium mt-5 group-hover:translate-x-1 transition-transform">
-                Read it
+              <span className="inline-block font-mono text-[12px] text-ink mt-6 group-hover:translate-x-1 transition-transform">
+                Read it &rarr;
               </span>
             </Link>
           </Reveal>
-          <Reveal delay={100}>
-            <Link
-              href="/methodology"
-              className="group block rounded-2xl border border-line p-8 h-full bg-white hover:border-accent-border transition-colors"
-            >
-              <p className="text-faint text-xs font-semibold uppercase tracking-widest">Methodology</p>
-              <h3 className="text-xl font-semibold mt-3">Protocols, screening, and analysis</h3>
+          <Reveal delay={80}>
+            <Link href="/methodology" className="group block p-8 sm:p-10 h-full hover:bg-surface/60 transition-colors">
+              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+                Methodology
+              </p>
+              <h3 className="font-serif text-2xl mt-3">Protocols, screening, and analysis</h3>
               <p className="text-muted text-sm mt-3 leading-relaxed">
                 The research the system stands on: NICHD, the Cognitive Interview, and the
                 suggestibility literature, with every screening category listed.
               </p>
-              <span className="inline-block text-ink text-sm font-medium mt-5 group-hover:translate-x-1 transition-transform">
-                Read it
+              <span className="inline-block font-mono text-[12px] text-ink mt-6 group-hover:translate-x-1 transition-transform">
+                Read it &rarr;
               </span>
             </Link>
           </Reveal>
@@ -255,31 +351,29 @@ export default function LandingPage() {
       </section>
 
       {/* Final CTA */}
-      <section className="max-w-6xl mx-auto px-5 pb-24 w-full">
-        <Reveal>
-          <div className="relative rounded-3xl overflow-hidden border border-line">
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-accent-soft via-white to-white" />
-            <div aria-hidden className="absolute -top-24 -right-24 w-96 h-96 rounded-full blur-3xl bg-[radial-gradient(closest-side,rgba(29,78,216,0.18),transparent)]" />
-            <div className="relative px-8 sm:px-14 py-14 sm:py-20 text-center">
-              <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight">
+      <section className="border-t border-line bg-white">
+        <div className="max-w-6xl mx-auto px-5 py-20 sm:py-28">
+          <Reveal>
+            <div className="max-w-2xl">
+              <h2 className="font-serif text-4xl sm:text-5xl tracking-tight">
                 See a complete case in two minutes.
               </h2>
-              <p className="text-muted mt-4 max-w-xl mx-auto">
+              <p className="text-muted mt-5 leading-relaxed">
                 The demo workspace contains a full sample case: transcript, analysis,
                 observations, and both reports. You can also run a live interview on yourself.
               </p>
-              <div className="flex flex-col sm:flex-row gap-3 justify-center mt-8">
-                <DemoButton className="px-7 py-3.5 bg-accent hover:bg-accent-hover text-white font-medium rounded-xl transition-all hover:shadow-lg hover:shadow-accent/25" />
+              <div className="flex flex-col sm:flex-row sm:items-center gap-5 mt-9">
+                <DemoButton className="px-6 py-3 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-sm transition-colors text-center disabled:opacity-60" />
                 <Link
                   href="/contact"
-                  className="px-7 py-3.5 border border-line hover:border-faint text-ink font-medium rounded-xl transition-colors bg-white"
+                  className="text-sm text-ink border-b border-ink/30 hover:border-ink pb-0.5 transition-colors w-fit"
                 >
-                  Talk to us
+                  Talk to us about a pilot
                 </Link>
               </div>
             </div>
-          </div>
-        </Reveal>
+          </Reveal>
+        </div>
       </section>
 
       <SiteFooter />

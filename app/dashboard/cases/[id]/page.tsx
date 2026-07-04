@@ -82,7 +82,7 @@ export default function CaseDetailPage() {
 
   if (!caseData) {
     return (
-      <div className="min-h-screen bg-surface">
+      <div className="min-h-screen bg-paper">
         <TopNav />
         <div className="max-w-5xl mx-auto px-5 py-8">
           <div className="bg-white border border-line rounded-xl h-32 animate-pulse" />
@@ -97,7 +97,7 @@ export default function CaseDetailPage() {
   );
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-paper">
       <TopNav crumbs={[{ label: caseData.caseNumber }]} />
 
       <div className="max-w-5xl mx-auto px-5 py-6 sm:py-8 space-y-5">
@@ -106,10 +106,10 @@ export default function CaseDetailPage() {
           <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="flex items-center gap-3 flex-wrap">
-                <h1 className="text-lg font-semibold text-ink">{caseData.incidentType}</h1>
+                <h1 className="font-serif text-2xl tracking-tight text-ink">{caseData.incidentType}</h1>
                 {totalContradictions > 0 && <ContradictionBadge count={totalContradictions} />}
               </div>
-              <p className="text-faint text-sm font-mono mt-0.5">{caseData.caseNumber}</p>
+              <p className="text-faint text-xs font-mono tracking-[0.04em] mt-1">{caseData.caseNumber}</p>
               <p className="text-muted text-sm mt-3 max-w-xl leading-relaxed">{caseData.description}</p>
             </div>
             <button
@@ -146,7 +146,7 @@ export default function CaseDetailPage() {
 
         {/* Interviews */}
         <div>
-          <h2 className="text-muted text-sm mb-3">
+          <h2 className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint mb-3">
             Interviews ({caseData.interviews.length})
           </h2>
 
@@ -162,8 +162,10 @@ export default function CaseDetailPage() {
                 return (
                   <div
                     key={iv.id}
-                    className={`bg-white border rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
-                      iv.status === 'escalated' ? 'border-red-300' : 'border-line'
+                    className={`bg-white border p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                      iv.status === 'escalated'
+                        ? 'border-red-300 shadow-[inset_3px_0_0_0_#DC2626]'
+                        : 'border-line'
                     }`}
                   >
                     <div className="flex items-center gap-4 min-w-0">

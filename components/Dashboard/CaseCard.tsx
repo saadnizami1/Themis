@@ -42,18 +42,18 @@ export default function CaseCard({
   return (
     <Link href={`/dashboard/cases/${id}`} className="block">
       <div
-        className={`bg-white border rounded-xl p-5 transition-colors ${
-          hasEscalation ? 'border-red-300' : 'border-line hover:border-faint'
+        className={`bg-white border border-line p-5 transition-colors hover:border-faint ${
+          hasEscalation ? 'shadow-[inset_3px_0_0_0_#DC2626]' : ''
         }`}
       >
         <div className="flex items-start justify-between mb-3 gap-3">
           <div className="min-w-0">
-            <p className="text-xs text-faint font-mono">{caseNumber}</p>
-            <h3 className="text-ink font-medium mt-0.5 truncate">{incidentType}</h3>
+            <p className="font-mono text-[11px] tracking-[0.04em] text-faint">{caseNumber}</p>
+            <h3 className="text-ink font-medium mt-1 truncate">{incidentType}</h3>
           </div>
-          <div className="flex items-center gap-2 shrink-0 flex-wrap justify-end">
+          <div className="flex items-center gap-4 shrink-0 flex-wrap justify-end pt-0.5">
             {hasEscalation && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-50 text-red-800 border border-red-200">
+              <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-red-700">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
                 Escalated
               </span>
@@ -67,7 +67,9 @@ export default function CaseCard({
           </span>
           <span>{completed} completed</span>
           {inProgress && <span className="text-amber-700 font-medium">live now</span>}
-          <span className="ml-auto text-faint">{new Date(createdAt).toLocaleDateString()}</span>
+          <span className="ml-auto font-mono text-[11px] text-faint">
+            {new Date(createdAt).toLocaleDateString()}
+          </span>
         </div>
       </div>
     </Link>

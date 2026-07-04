@@ -1,9 +1,9 @@
-const styles: Record<string, string> = {
-  pending: 'bg-surface text-muted border-line',
-  in_progress: 'bg-amber-50 text-amber-800 border-amber-200',
-  completed: 'bg-emerald-50 text-emerald-800 border-emerald-200',
-  terminated: 'bg-surface text-muted border-line',
-  escalated: 'bg-red-50 text-red-800 border-red-200',
+const styles: Record<string, { dot: string; text: string; pulse?: boolean }> = {
+  pending: { dot: 'bg-faint', text: 'text-muted' },
+  in_progress: { dot: 'bg-amber-500', text: 'text-amber-800', pulse: true },
+  completed: { dot: 'bg-accent', text: 'text-ink' },
+  terminated: { dot: 'bg-faint', text: 'text-muted' },
+  escalated: { dot: 'bg-red-600', text: 'text-red-700', pulse: true },
 };
 
 const labels: Record<string, string> = {
@@ -15,18 +15,12 @@ const labels: Record<string, string> = {
 };
 
 export default function StatusBadge({ status }: { status: string }) {
+  const s = styles[status] || styles.pending;
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
-        styles[status] || styles.pending
-      }`}
+      className={`inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] ${s.text}`}
     >
-      {status === 'escalated' && (
-        <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />
-      )}
-      {status === 'in_progress' && (
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-      )}
+      <span className={`w-1.5 h-1.5 rounded-full ${s.dot} ${s.pulse ? 'animate-pulse' : ''}`} />
       {labels[status] || status}
     </span>
   );

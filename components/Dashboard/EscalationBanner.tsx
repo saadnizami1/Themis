@@ -35,10 +35,10 @@ export default function EscalationBanner() {
   if (alerts.length === 0) return null;
 
   return (
-    <div className="bg-red-50 border border-red-200 rounded-xl p-4 sm:p-5">
-      <div className="flex items-center gap-2 mb-3">
+    <div className="bg-white border border-red-200 shadow-[inset_3px_0_0_0_#DC2626] p-4 sm:p-5">
+      <div className="flex items-center gap-2.5 mb-3">
         <span className="w-2 h-2 rounded-full bg-red-600 animate-pulse" />
-        <h2 className="text-red-900 font-medium text-sm">
+        <h2 className="font-mono text-[11px] uppercase tracking-[0.14em] text-red-700">
           Safety escalation{alerts.length > 1 ? 's' : ''}, review required
         </h2>
       </div>
@@ -47,7 +47,7 @@ export default function EscalationBanner() {
           <Link
             key={a.id}
             href={`/dashboard/cases/${a.caseId}/interview/${a.id}`}
-            className="flex items-center justify-between gap-3 bg-white border border-red-200 rounded-lg px-4 py-3 hover:border-red-400 transition-colors"
+            className="flex items-center justify-between gap-3 bg-white border border-red-200 rounded-sm px-4 py-3 hover:border-red-400 transition-colors"
           >
             <div className="min-w-0">
               <p className="text-ink text-sm font-medium truncate">

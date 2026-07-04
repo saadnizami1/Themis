@@ -28,7 +28,7 @@ function Skeleton() {
   return (
     <div className="space-y-3">
       {[0, 1, 2].map((i) => (
-        <div key={i} className="bg-surface border border-line rounded-xl h-24 animate-pulse" />
+        <div key={i} className="bg-surface border border-line h-24 animate-pulse" />
       ))}
     </div>
   );
@@ -106,7 +106,7 @@ export default function DashboardPage() {
     {
       label: 'Completed',
       value: allInterviews.filter((i) => i.status === 'completed').length,
-      cls: 'text-emerald-700',
+      cls: 'text-ink',
     },
     {
       label: 'Escalations',
@@ -116,21 +116,21 @@ export default function DashboardPage() {
   ];
 
   const inputCls =
-    'w-full bg-white border border-line rounded-lg px-4 py-2 text-ink text-sm focus:border-accent outline-none transition-colors';
+    'w-full bg-white border border-line rounded-sm px-4 py-2 text-ink text-sm focus:border-accent outline-none transition-colors';
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-paper">
       <TopNav />
 
-      <div className="max-w-5xl mx-auto px-5 py-6 sm:py-8 space-y-5">
+      <div className="max-w-5xl mx-auto px-5 py-6 sm:py-8 space-y-6">
         <EscalationBanner />
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {stats.map((s) => (
-            <div key={s.label} className="bg-white rounded-xl border border-line p-4">
-              <p className="text-xs text-faint uppercase tracking-wide">{s.label}</p>
-              <p className={`text-2xl font-semibold mt-1 ${s.cls}`}>
+        {/* Ledger strip */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 bg-white border border-line divide-x divide-line">
+          {stats.map((s, i) => (
+            <div key={s.label} className={`p-4 sm:p-5 ${i > 1 ? 'border-t border-line sm:border-t-0' : ''}`}>
+              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">{s.label}</p>
+              <p className={`font-serif text-3xl mt-1.5 tabular-nums ${s.cls}`}>
                 {cases === null ? '-' : s.value}
               </p>
             </div>
@@ -138,11 +138,11 @@ export default function DashboardPage() {
         </div>
 
         {/* Header row */}
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-muted text-sm">Cases</h2>
+        <div className="flex items-center justify-between gap-3 pt-2">
+          <h2 className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">Case registry</h2>
           <button
             onClick={() => setShowForm(!showForm)}
-            className="px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-sm transition-colors"
           >
             New case
           </button>
@@ -152,9 +152,9 @@ export default function DashboardPage() {
         {showForm && (
           <form
             onSubmit={handleCreateCase}
-            className="bg-white rounded-xl border border-line p-5 sm:p-6 space-y-4 animate-fadeUp"
+            className="bg-white border border-line p-5 sm:p-6 space-y-4 animate-fadeUp"
           >
-            <h2 className="text-ink font-medium">New case</h2>
+            <h2 className="font-serif text-2xl tracking-tight">New case</h2>
 
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
@@ -181,7 +181,7 @@ export default function DashboardPage() {
 
             <div>
               <label className="block text-sm text-muted mb-1.5">
-                Description <span className="text-faint">,  context for the interviewer, never shown to the witness</span>
+                Description <span className="text-faint">(context for the interviewer, never shown to the witness)</span>
               </label>
               <textarea
                 value={description}
@@ -195,7 +195,7 @@ export default function DashboardPage() {
 
             <div>
               <label className="block text-sm text-muted mb-1.5">
-                Report PDF <span className="text-faint">,  optional</span>
+                Report PDF <span className="text-faint">(optional)</span>
               </label>
               <input
                 type="file"
@@ -211,14 +211,14 @@ export default function DashboardPage() {
               <button
                 type="submit"
                 disabled={creating}
-                className="px-5 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-lg transition-colors disabled:opacity-60"
+                className="px-5 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-sm transition-colors disabled:opacity-60"
               >
-                {creating ? 'Creating…' : 'Create case'}
+                {creating ? 'Creating...' : 'Create case'}
               </button>
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-5 py-2 border border-line hover:border-faint text-ink text-sm font-medium rounded-lg transition-colors"
+                className="px-5 py-2 border border-line hover:border-faint text-ink text-sm font-medium rounded-sm transition-colors"
               >
                 Cancel
               </button>
@@ -230,7 +230,7 @@ export default function DashboardPage() {
         {cases === null ? (
           <Skeleton />
         ) : cases.length === 0 ? (
-          <div className="text-center py-16 text-faint bg-white rounded-xl border border-dashed border-line">
+          <div className="text-center py-16 text-faint bg-white border border-dashed border-line">
             <p className="text-sm">No cases yet.</p>
           </div>
         ) : (

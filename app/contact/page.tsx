@@ -13,10 +13,10 @@ export default function ContactPage() {
       <Reveal>
         <a
           href="mailto:saadnizami@icloud.com"
-          className="block rounded-2xl border border-line bg-gradient-to-br from-white to-accent-soft/50 p-8 hover:border-accent-border transition-colors group"
+          className="block border border-line bg-white p-8 hover:border-accent-border transition-colors group"
         >
-          <p className="text-faint text-xs uppercase tracking-widest">Email</p>
-          <p className="text-xl sm:text-2xl font-semibold mt-2 text-ink group-hover:text-accent transition-colors break-all">
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">Email</p>
+          <p className="font-serif text-2xl sm:text-3xl mt-2 text-ink group-hover:text-accent transition-colors break-all">
             saadnizami@icloud.com
           </p>
           <p className="text-muted text-sm mt-3">We usually reply within two working days.</p>

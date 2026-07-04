@@ -50,7 +50,7 @@ export function Reveal({
 }
 
 // Returns 0..1 progress of scrolling through a tall wrapper element.
-function useScrollProgress(ref: React.RefObject<HTMLElement>) {
+export function useScrollProgress(ref: React.RefObject<HTMLElement | HTMLDivElement | null>) {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -98,13 +98,13 @@ export function StickyPanels({ panels, heading }: { panels: Panel[]; heading: st
     <>
       {/* Mobile: stacked */}
       <section className="md:hidden max-w-6xl mx-auto px-5 py-16">
-        <h2 className="text-2xl font-semibold tracking-tight mb-8">{heading}</h2>
+        <h2 className="font-serif text-3xl tracking-tight mb-8">{heading}</h2>
         <div className="space-y-4">
           {panels.map((p) => (
             <Reveal key={p.title}>
-              <div className="border border-line rounded-2xl p-6 bg-white">
-                <p className="text-accent text-xs font-semibold uppercase tracking-widest">{p.kicker}</p>
-                <h3 className="text-xl font-semibold mt-2">{p.title}</h3>
+              <div className="border border-line p-6 bg-white">
+                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">{p.kicker}</p>
+                <h3 className="font-serif text-2xl mt-2">{p.title}</h3>
                 <p className="text-muted text-sm mt-3 leading-relaxed">{p.body}</p>
                 <p className="text-faint text-xs mt-4 pt-4 border-t border-line">{p.note}</p>
               </div>
@@ -121,8 +121,8 @@ export function StickyPanels({ panels, heading }: { panels: Panel[]; heading: st
       >
         <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
           <div className="max-w-6xl mx-auto px-5 w-full mb-10 flex items-end justify-between">
-            <h2 className="text-3xl font-semibold tracking-tight">{heading}</h2>
-            <span className="text-faint text-sm tabular-nums">
+            <h2 className="font-serif text-4xl tracking-tight">{heading}</h2>
+            <span className="font-mono text-faint text-sm tabular-nums">
               {String(Math.min(panels.length, Math.floor(shift) + 1)).padStart(2, '0')} /{' '}
               {String(panels.length).padStart(2, '0')}
             </span>
@@ -136,12 +136,13 @@ export function StickyPanels({ panels, heading }: { panels: Panel[]; heading: st
               return (
                 <article
                   key={p.title}
-                  className={`shrink-0 w-[min(44rem,70vw)] rounded-3xl border p-10 transition-all duration-500 ${
-                    active ? 'border-accent-border bg-accent-soft/40' : 'border-line bg-white'
+                  className={`shrink-0 w-[min(44rem,70vw)] border bg-white p-10 transition-all duration-500 ${
+                    active ? 'border-ink/30' : 'border-line'
                   }`}
+                  style={{ boxShadow: active ? 'inset 3px 0 0 0 #1E4B3B' : 'none' }}
                 >
-                  <p className="text-accent text-xs font-semibold uppercase tracking-widest">{p.kicker}</p>
-                  <h3 className="text-3xl font-semibold mt-3 tracking-tight">{p.title}</h3>
+                  <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">{p.kicker}</p>
+                  <h3 className="font-serif text-4xl mt-3 tracking-tight">{p.title}</h3>
                   <p className="text-muted mt-5 leading-relaxed max-w-xl">{p.body}</p>
                   <p className="text-faint text-sm mt-8 pt-6 border-t border-line max-w-xl">{p.note}</p>
                 </article>
@@ -192,11 +193,13 @@ export function Stat({ value, suffix = '', label }: { value: number; suffix?: st
 
   return (
     <div ref={ref}>
-      <p className="text-4xl sm:text-5xl font-semibold tracking-tight tabular-nums">
+      <p className="font-serif text-5xl sm:text-6xl tracking-tight tabular-nums">
         {n}
         {suffix}
       </p>
-      <p className="text-muted text-sm mt-2">{label}</p>
+      <p className="font-mono text-[11px] tracking-[0.04em] text-faint mt-3 leading-relaxed">
+        {label}
+      </p>
     </div>
   );
 }
