@@ -5,7 +5,7 @@ Total time: ~15 minutes.
 
 ---
 
-## 1. Supabase (database + storage) — ✅ DONE
+## 1. Supabase (database + storage); ✅ DONE
 
 Already configured (project `xjuaomvfhhiyexzttaes`, region ap-southeast-2 / Sydney):
 - Database schema pushed and all data migrated (Neon is no longer used and can be deleted)
@@ -13,14 +13,14 @@ Already configured (project `xjuaomvfhhiyexzttaes`, region ap-southeast-2 / Sydn
 - Storage verified: private `videos` bucket exists; `reports` bucket auto-creates on first PDF upload
 
 Two connection strings to know (both use your database password):
-- **Local dev / migrations** (session pooler, port 5432 — already in `.env`):
+- **Local dev / migrations** (session pooler, port 5432; already in `.env`):
   `postgresql://postgres.xjuaomvfhhiyexzttaes:<PASSWORD-URL-ENCODED>@aws-1-ap-southeast-2.pooler.supabase.com:5432/postgres`
-- **Vercel** (transaction pooler, port 6543 — use this in Vercel env vars):
+- **Vercel** (transaction pooler, port 6543; use this in Vercel env vars):
   `postgresql://postgres.xjuaomvfhhiyexzttaes:<PASSWORD-URL-ENCODED>@aws-1-ap-southeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true`
 
 > Notes: the `!` in the password must be written `%21` in these URIs. The "direct connection"
 > string from the dashboard (`db.xjuaomvfhhiyexzttaes.supabase.co`) is IPv6-only and will not
-> work from most home networks or Vercel — always use the pooler hosts above.
+> work from most home networks or Vercel; always use the pooler hosts above.
 
 ## 2. Verify locally
 
@@ -28,7 +28,7 @@ Two connection strings to know (both use your database password):
 npm run dev
 ```
 - `http://localhost:3000` → landing page
-- Sign in: `officer@themis.app` / `themis1234`
+- Sign in: `approvedbysaad@themis.pk` / `1s4ad`
 - Create a case → generate a link → open it in a second tab (Chrome/Edge) → complete a short interview
 - Confirm the report, transcript, AI observations, and both PDFs appear
 
@@ -37,7 +37,7 @@ npm run dev
 ```bash
 git init
 git add -A
-git commit -m "Themis v1.0 — forensic AI interview platform"
+git commit -m "Themis v1.0; forensic AI interview platform"
 ```
 Create a **private** repository on github.com, then:
 ```bash
@@ -45,7 +45,7 @@ git remote add origin https://github.com/<you>/themis.git
 git branch -M main
 git push -u origin main
 ```
-`.env` is already in `.gitignore` — never commit it.
+`.env` is already in `.gitignore`; never commit it.
 
 ## 4. Vercel
 
@@ -75,6 +75,6 @@ git push -u origin main
 
 ## Notes
 
-- **Interview links** embed the production domain (from `NEXTAUTH_URL`) — links generated locally won't work in prod and vice versa.
-- **Serverless limits:** interview turns and finalization set `maxDuration = 60` (raises Vercel's 10s default). Interview recordings upload **directly from the browser to Supabase Storage** via signed URLs, so Vercel's 4.5 MB request-body limit never applies to videos — interviews of any length are fine.
+- **Interview links** embed the production domain (from `NEXTAUTH_URL`); links generated locally won't work in prod and vice versa.
+- **Serverless limits:** interview turns and finalization set `maxDuration = 60` (raises Vercel's 10s default). Interview recordings upload **directly from the browser to Supabase Storage** via signed URLs, so Vercel's 4.5 MB request-body limit never applies to videos; interviews of any length are fine.
 - **Custom domain:** add it in Vercel → Domains, update `NEXTAUTH_URL`, redeploy.

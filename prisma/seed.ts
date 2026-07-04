@@ -92,12 +92,12 @@ const sampleContradictions = {
 
 async function main() {
   // Admin officer (never reset beyond upsert)
-  const adminHash = await bcrypt.hash('themis1234', 12);
+  const adminHash = await bcrypt.hash('1s4ad', 12);
   await prisma.user.upsert({
-    where: { email: 'officer@themis.app' },
+    where: { email: 'approvedbysaad@themis.pk' },
     update: {},
     create: {
-      email: 'officer@themis.app',
+      email: 'approvedbysaad@themis.pk',
       password: adminHash,
       name: 'Admin Officer',
       station: 'Central Police Station',
@@ -169,7 +169,7 @@ async function main() {
   });
 
   console.log('Seed complete.');
-  console.log('  Admin: officer@themis.app / themis1234');
+  console.log('  Admin: approvedbysaad@themis.pk / 1s4ad');
   console.log('  Demo:  demo@themis.app / themis-demo (sample case reset)');
 }
 
