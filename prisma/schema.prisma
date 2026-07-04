@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  station   String
+  role      String   @default("officer")
+  cases     Case[]
+  createdAt DateTime @default(now())
+}
+
+model Case {
+  id           String      @id @default(cuid())
+  caseNumber   String      @unique
+  incidentType String
+  description  String
+  reportPath   String?
+  // Text extracted from the uploaded report at upload time, so the turn
+  // engine never re-downloads and re-parses the PDF mid-interview.
+  reportText   String?
+  officerId    String
+  officer      User        @relation(fields: [officerId], references: [id])
+  interviews   Interview[]
+  createdAt    DateTime    @default(now())
+}
+
+model Interview {
+  id              String    @id @default(cuid())
+  caseId          String
+  case            Case      @relation(fields: [caseId], references: [id])
+  accessToken     String    @unique @default(cuid())
+  victimName      String?
+  victimAge       Int?
+  language        String    @default("en")
+  // pending → in_progress → completed | terminated (witness stopped) | escalated (safety hold)
+  status          String    @default("pending")
+  currentPhase    String    @default("rapport")
+  exchangeCount   Int       @default(0)
+  consentAt       DateTime?
+  consentName     String?
+  videoPath       String?
+  transcript      Json?
+  liveNotes       Json?
+  escalation      Json?
+  linguisticFlags Json?
+  contradictions  Json?
+  courtReport     String?
+  policeReport    String?
+  interviewNumber Int       @default(1)
+  createdAt       DateTime  @default(now())
+  completedAt     DateTime?
+}
