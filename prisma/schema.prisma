@@ -8,14 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String
-  name      String
-  station   String
-  role      String   @default("officer")
-  cases     Case[]
-  createdAt DateTime @default(now())
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  station       String
+  role          String    @default("officer")
+  cases         Case[]
+  // Officers may rename themselves once every 30 days; null = never renamed.
+  nameChangedAt DateTime?
+  createdAt     DateTime  @default(now())
 }
 
 model Case {

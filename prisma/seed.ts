@@ -100,7 +100,7 @@ async function main() {
       email: 'approvedbysaad@themis.pk',
       password: adminHash,
       name: 'Admin Officer',
-      station: 'Central Police Station',
+      station: 'Lahore',
       role: 'officer',
     },
   });

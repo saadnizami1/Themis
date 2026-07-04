@@ -197,12 +197,40 @@ export default function DashboardPage() {
               <label className="block text-sm text-muted mb-1.5">
                 Report PDF <span className="text-faint">(optional)</span>
               </label>
-              <input
-                type="file"
-                accept="application/pdf"
-                onChange={(e) => setReportFile(e.target.files?.[0] || null)}
-                className="text-sm text-muted"
-              />
+              <div className="flex items-center gap-3 flex-wrap">
+                <label className="inline-flex items-center gap-2 px-4 py-2 border border-line hover:border-accent hover:text-accent text-ink text-sm font-medium rounded-sm cursor-pointer transition-colors">
+                  <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="1.7">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21.4 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.82-2.83l8.49-8.48"
+                    />
+                  </svg>
+                  {reportFile ? 'Replace file' : 'Attach report'}
+                  <input
+                    type="file"
+                    accept="application/pdf"
+                    className="sr-only"
+                    onClick={(e) => ((e.target as HTMLInputElement).value = '')}
+                    onChange={(e) => setReportFile(e.target.files?.[0] || null)}
+                  />
+                </label>
+                {reportFile ? (
+                  <span className="inline-flex items-center gap-2.5 font-mono text-[12px] text-muted bg-surface border border-line rounded-sm px-3 py-1.5 max-w-full">
+                    <span className="truncate max-w-[14rem]">{reportFile.name}</span>
+                    <button
+                      type="button"
+                      onClick={() => setReportFile(null)}
+                      aria-label="Remove file"
+                      className="text-faint hover:text-red-700 transition-colors leading-none"
+                    >
+                      &#215;
+                    </button>
+                  </span>
+                ) : (
+                  <span className="text-faint text-sm">Parsed once at upload, used as interview context.</span>
+                )}
+              </div>
             </div>
 
             {formError && <p className="text-red-700 text-sm">{formError}</p>}

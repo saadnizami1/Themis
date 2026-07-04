@@ -38,10 +38,14 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id;
         token.station = (user as { station?: string }).station;
+      }
+      // Client-initiated refresh (useSession().update) after a profile change.
+      if (trigger === 'update' && typeof session?.name === 'string' && session.name.trim()) {
+        token.name = session.name.trim();
       }
       return token;
     },
