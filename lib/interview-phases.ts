@@ -23,8 +23,8 @@ export const PHASES: PhaseConfig[] = [
     label: 'Introduction',
     labelUr: 'تعارف',
     description: 'Ground rules and rapport building',
-    minExchanges: 3,
-    maxExchanges: 6,
+    minExchanges: 1,
+    maxExchanges: 2,
     openingPrompt:
       "Hello. My name is Themis and I'm going to ask you some questions about what happened. There are no right or wrong answers. I just want to understand what you remember. Before we start, I want to go over three important things: First, if you don't know the answer to something, please just say 'I don't know'. Second, if you don't understand my question, please tell me and I'll ask it differently. Third, if I say something that isn't correct, please tell me. You can also say 'I need a break' at any time, and we will pause. Do you have any questions before we begin?",
     openingPromptUr:
@@ -35,8 +35,8 @@ export const PHASES: PhaseConfig[] = [
     label: 'Warm-Up',
     labelUr: 'تیاری',
     description: 'Neutral free recall practice',
-    minExchanges: 2,
-    maxExchanges: 4,
+    minExchanges: 1,
+    maxExchanges: 2,
     openingPrompt:
       "Before we talk about why you're here today, I'd like to practice. Can you tell me about what you did this morning, from when you woke up? Take your time and tell me everything you remember.",
     openingPromptUr:
@@ -47,8 +47,8 @@ export const PHASES: PhaseConfig[] = [
     label: 'Recollection',
     labelUr: 'یادداشت',
     description: 'Mental context reinstatement',
-    minExchanges: 2,
-    maxExchanges: 3,
+    minExchanges: 1,
+    maxExchanges: 2,
     openingPrompt:
       "Now I'd like you to think back to that day. If you're comfortable, close your eyes for a moment. Think about where you were. What could you see around you? What could you hear? How were you feeling at that time? Take your time.",
     openingPromptUr:
@@ -59,8 +59,8 @@ export const PHASES: PhaseConfig[] = [
     label: 'Your Account',
     labelUr: 'آپ کی بات',
     description: 'Free narrative + open probes',
-    minExchanges: 4,
-    maxExchanges: 20,
+    minExchanges: 2,
+    maxExchanges: 6,
     openingPrompt:
       'Now, in your own words, please tell me everything that happened, from the very beginning to the very end. Take as much time as you need.',
     openingPromptUr:
@@ -71,8 +71,8 @@ export const PHASES: PhaseConfig[] = [
     label: 'Follow-Up',
     labelUr: 'مزید سوالات',
     description: 'Minimal, witness-grounded clarification',
-    minExchanges: 2,
-    maxExchanges: 8,
+    minExchanges: 1,
+    maxExchanges: 4,
     openingPrompt:
       "Thank you for telling me all of that. I'd like to ask a few more questions about what you've already described.",
     openingPromptUr:
@@ -84,7 +84,7 @@ export const PHASES: PhaseConfig[] = [
     labelUr: 'اختتام',
     description: 'Closing and final check',
     minExchanges: 1,
-    maxExchanges: 3,
+    maxExchanges: 2,
     openingPrompt:
       "We're almost done. Is there anything else you want to tell me that I haven't asked about? Is there anything you're unsure about in what you've told me today?",
     openingPromptUr:

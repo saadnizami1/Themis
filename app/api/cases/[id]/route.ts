@@ -3,9 +3,10 @@ import { getServerSession } from 'next-auth';
 export const dynamic = 'force-dynamic';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { caseUnlocked } from '@/lib/case-lock';
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
@@ -25,5 +26,13 @@ export async function GET(
 
   if (!c) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  return NextResponse.json(c);
+  if (!caseUnlocked(c, req)) {
+    return NextResponse.json(
+      { error: 'This case is PIN-protected', locked: true, caseNumber: c.caseNumber },
+      { status: 403 }
+    );
+  }
+
+  const { pinHash, ...safe } = c;
+  return NextResponse.json({ ...safe, locked: !!pinHash });
 }

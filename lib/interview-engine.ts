@@ -61,6 +61,44 @@ interface Decision {
   assessment: { note: string; signals: string[] };
 }
 
+// ─── Time and repetition budgets ─────────────────────────────────────────────
+//
+// The interview must respect the witness's time: soft budget pushes the
+// engine into closing, the hard budget ends the session outright, and the
+// exchange cap bounds cost even if timestamps are missing.
+
+const SOFT_BUDGET_MS = 5.5 * 60_000; // jump to closing past this
+const HARD_BUDGET_MS = 7 * 60_000; // end the interview past this
+const MAX_WITNESS_EXCHANGES = 24;
+
+function elapsedMsOf(transcript: TranscriptEntry[]): number {
+  const first = transcript.find((t) => t.role === 'ai');
+  if (!first) return 0;
+  const t0 = Date.parse(first.timestamp);
+  if (!Number.isFinite(t0)) return 0;
+  return Date.now() - t0;
+}
+
+// Token-set similarity; catches "reworded but identical" questions.
+function questionSimilarity(a: string, b: string): number {
+  const tok = (s: string) =>
+    new Set(
+      s
+        .toLowerCase()
+        .replace(/[^\w\s؀-ۿ]/g, '')
+        .split(/\s+/)
+        .filter((w) => w.length > 2)
+    );
+  const ta = tok(a);
+  const tb = tok(b);
+  if (ta.size === 0 || tb.size === 0) return 0;
+  let inter = 0;
+  ta.forEach((w) => {
+    if (tb.has(w)) inter++;
+  });
+  return inter / Math.min(ta.size, tb.size);
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function phaseIndexOf(id: string): number {
@@ -152,6 +190,12 @@ export async function runTurn(interviewId: string, event: TurnEvent): Promise<Tu
   const stopAskedBefore = transcript.some(
     (t) => t.role === 'event' && t.content === 'confirm_stop_asked'
   );
+  const elapsedMs = elapsedMsOf(transcript);
+  const witnessExchanges = transcript.filter((t) => t.role === 'witness').length;
+  const overHardBudget =
+    elapsedMs > HARD_BUDGET_MS || witnessExchanges >= MAX_WITNESS_EXCHANGES;
+  const overSoftBudget = elapsedMs > SOFT_BUDGET_MS;
+  const wrapUp = overSoftBudget || elapsedMs > 4.5 * 60_000;
 
   // Case context for the model (never shown to witness). Report text was
   // extracted once at upload time; no file I/O in the turn path.
@@ -201,6 +245,8 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
           previousInterviews: previousInterviewsText,
           language,
           latestUtterance: witnessText,
+          elapsedMinutes: elapsedMs / 60_000,
+          wrapUp,
         }),
       },
     ],
@@ -274,19 +320,40 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
   if (mustAdvance && action === 'ask') action = 'advance_phase';
   const isClosing = phaseId === 'closing';
 
-  // Loop breaker: never re-ask the exact question just asked. If the phase
-  // minimum is met, treat a repeat as "this phase is exhausted" and advance
-  // (which in closing means ending); otherwise swap in a neutral probe.
-  const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, ' ').trim();
-  const lastAiEntry = [...transcript].reverse().find((t) => t.role === 'ai');
+  // ── Time budget enforcement ──
+  // Hard budget: end now (witness break/stop flows still take precedence).
   if (
-    action === 'ask' &&
-    lastAiEntry &&
-    decision.question &&
-    normalize(decision.question) === normalize(lastAiEntry.content)
+    overHardBudget &&
+    action !== 'offer_break' &&
+    action !== 'confirm_stop' &&
+    action !== 'end_interview'
   ) {
-    if (mayAdvance) action = 'advance_phase';
-    else decision.question = fallbackProbe(language);
+    action = 'end_interview';
+    decision.question = '';
+  }
+  // Soft budget: stop drilling; jump straight to closing.
+  const jumpToClosing =
+    !overHardBudget &&
+    overSoftBudget &&
+    !isClosing &&
+    (action === 'ask' || action === 'advance_phase');
+  if (jumpToClosing) action = 'advance_phase';
+
+  // Loop breaker: never re-ask a question that is the same as, or a reworded
+  // duplicate of, a recent one. If the phase minimum is met, a repeat means
+  // the phase is exhausted; advance (in closing that ends the interview).
+  const recentAiQuestions = transcript
+    .filter((t) => t.role === 'ai')
+    .slice(-6)
+    .map((t) => t.content);
+  if (action === 'ask' && decision.question) {
+    const isDuplicate = recentAiQuestions.some(
+      (q) => questionSimilarity(decision.question, q) >= 0.75
+    );
+    if (isDuplicate) {
+      if (mayAdvance) action = 'advance_phase';
+      else decision.question = fallbackProbe(language);
+    }
   }
 
   // ── Break ──
@@ -358,7 +425,7 @@ ${reportText ? `Police report summary:\n${reportText}` : ''}`.trim();
 
   // ── Advance phase ──
   if (action === 'advance_phase') {
-    const nextId = getNextPhase(phaseId);
+    const nextId: Phase | null = jumpToClosing ? 'closing' : getNextPhase(phaseId);
     if (!nextId) {
       // No next phase (we're in closing); end gracefully
       const message =

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 export const maxDuration = 60;
 import { prisma } from '@/lib/prisma';
+import { rateLimit, tooMany } from '@/lib/rate-limit';
 import { runLinguisticAnalysis, generateFollowUpQuestions } from '@/lib/linguistic-analysis';
 import { generateVictimStatementSummary } from '@/lib/report-generator';
 import type { TranscriptEntry } from '@/lib/interview-engine';
@@ -13,6 +14,13 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
+  // Analysis is the most expensive call in the app; never let it be spammed.
+  const rl = rateLimit(`complete:${params.id}`, 3, 60 * 60_000);
+  if (!rl.ok) {
+    const r = tooMany(rl.retryAfterSec);
+    return NextResponse.json(r.body, r.init);
+  }
+
   const body = await req.json().catch(() => ({}));
   const { token, endReason } = body as { token?: string; endReason?: string };
 

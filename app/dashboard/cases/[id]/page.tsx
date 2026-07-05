@@ -7,6 +7,8 @@ import Link from 'next/link';
 import ContradictionBadge from '@/components/Dashboard/ContradictionBadge';
 import StatusBadge from '@/components/Dashboard/StatusBadge';
 import TopNav from '@/components/Dashboard/TopNav';
+import PinGate from '@/components/Dashboard/PinGate';
+import { caseKeyHeaders } from '@/lib/case-key';
 
 interface Interview {
   id: string;
@@ -36,6 +38,7 @@ export default function CaseDetailPage() {
   const router = useRouter();
   const { status } = useSession();
   const [caseData, setCaseData] = useState<CaseDetail | null>(null);
+  const [lockedInfo, setLockedInfo] = useState<{ caseNumber?: string } | null>(null);
   const [generating, setGenerating] = useState(false);
   const [newLink, setNewLink] = useState('');
   const [copied, setCopied] = useState('');
@@ -44,19 +47,30 @@ export default function CaseDetailPage() {
     if (status === 'unauthenticated') router.push('/login');
   }, [status, router]);
 
+  const loadCase = () => {
+    setLockedInfo(null);
+    fetch(`/api/cases/${params.id}`, { headers: caseKeyHeaders(String(params.id)) })
+      .then(async (r) => {
+        const data = await r.json();
+        if (r.status === 403 && data.locked) {
+          setLockedInfo({ caseNumber: data.caseNumber });
+          return;
+        }
+        if (r.ok) setCaseData(data);
+      })
+      .catch(() => {});
+  };
+
   useEffect(() => {
-    if (status === 'authenticated') {
-      fetch(`/api/cases/${params.id}`)
-        .then((r) => r.json())
-        .then(setCaseData);
-    }
+    if (status === 'authenticated') loadCase();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id, status]);
 
   const generateLink = async () => {
     setGenerating(true);
     const res = await fetch('/api/interviews', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...caseKeyHeaders(String(params.id)) },
       body: JSON.stringify({ caseId: params.id }),
     });
     const data = await res.json();
@@ -79,6 +93,21 @@ export default function CaseDetailPage() {
     setCopied(id);
     setTimeout(() => setCopied(''), 1500);
   };
+
+  if (lockedInfo) {
+    return (
+      <div className="min-h-screen bg-paper">
+        <TopNav crumbs={[{ label: lockedInfo.caseNumber || 'Locked case' }]} />
+        <div className="max-w-5xl mx-auto px-5 py-8">
+          <PinGate
+            caseId={String(params.id)}
+            caseNumber={lockedInfo.caseNumber}
+            onUnlocked={loadCase}
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (!caseData) {
     return (

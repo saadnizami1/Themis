@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { caseUnlocked } from '@/lib/case-lock';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 import { renderToBuffer } from '@react-pdf/renderer';
 import { CourtReport } from '@/components/PDF/CourtReport';
@@ -10,7 +11,7 @@ import React from 'react';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
@@ -31,6 +32,9 @@ export async function GET(
   });
 
   if (!interview) return new NextResponse('Not found', { status: 404 });
+  if (!caseUnlocked(interview.case, req)) {
+    return new NextResponse('This case is PIN-protected', { status: 403 });
+  }
   if (!['completed', 'terminated', 'escalated'].includes(interview.status)) {
     return new NextResponse('Interview not yet completed', { status: 400 });
   }

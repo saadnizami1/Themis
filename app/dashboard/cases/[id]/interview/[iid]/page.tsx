@@ -7,6 +7,8 @@ import dynamic from 'next/dynamic';
 import type { AnalysisResult } from '@/lib/linguistic-analysis';
 import TopNav from '@/components/Dashboard/TopNav';
 import StatusBadge from '@/components/Dashboard/StatusBadge';
+import PinGate from '@/components/Dashboard/PinGate';
+import { caseKeyHeaders } from '@/lib/case-key';
 
 const ReportViewer = dynamic(() => import('@/components/Dashboard/ReportViewer'), {
   ssr: false,
@@ -49,18 +51,47 @@ export default function InterviewReportPage() {
   const router = useRouter();
   const { status } = useSession();
   const [interview, setInterview] = useState<InterviewData | null>(null);
+  const [lockedInfo, setLockedInfo] = useState<{ caseNumber?: string } | null>(null);
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login');
   }, [status, router]);
 
+  const loadReport = () => {
+    setLockedInfo(null);
+    fetch(`/api/interviews/${params.iid}/report`, {
+      headers: caseKeyHeaders(String(params.id)),
+    })
+      .then(async (r) => {
+        const data = await r.json();
+        if (r.status === 403 && data.locked) {
+          setLockedInfo({ caseNumber: data.caseNumber });
+          return;
+        }
+        if (r.ok) setInterview(data);
+      })
+      .catch(() => {});
+  };
+
   useEffect(() => {
-    if (status === 'authenticated') {
-      fetch(`/api/interviews/${params.iid}/report`)
-        .then((r) => r.json())
-        .then(setInterview);
-    }
+    if (status === 'authenticated') loadReport();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.iid, status]);
+
+  if (lockedInfo) {
+    return (
+      <div className="min-h-screen bg-paper">
+        <TopNav crumbs={[{ label: lockedInfo.caseNumber || 'Locked case' }]} />
+        <div className="max-w-5xl mx-auto px-5 py-8">
+          <PinGate
+            caseId={String(params.id)}
+            caseNumber={lockedInfo.caseNumber}
+            onUnlocked={loadReport}
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (!interview) {
     return (
@@ -104,7 +135,7 @@ export default function InterviewReportPage() {
           </div>
         </div>
 
-        <ReportViewer interview={interview} />
+        <ReportViewer interview={interview} caseId={interview.case.id} />
       </div>
     </div>
   );

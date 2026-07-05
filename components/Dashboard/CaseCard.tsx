@@ -14,6 +14,7 @@ interface CaseCardProps {
   caseNumber: string;
   incidentType: string;
   createdAt: string;
+  locked?: boolean;
   interviews: Interview[];
 }
 
@@ -31,6 +32,7 @@ export default function CaseCard({
   caseNumber,
   incidentType,
   createdAt,
+  locked = false,
   interviews,
 }: CaseCardProps) {
   const completed = interviews.filter((iv) => iv.status === 'completed').length;
@@ -52,6 +54,15 @@ export default function CaseCard({
             <h3 className="text-ink font-medium mt-1 truncate">{incidentType}</h3>
           </div>
           <div className="flex items-center gap-4 shrink-0 flex-wrap justify-end pt-0.5">
+            {locked && (
+              <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-faint">
+                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="5" y="11" width="14" height="9" rx="1" />
+                  <path d="M8 11V8a4 4 0 018 0v3" />
+                </svg>
+                PIN
+              </span>
+            )}
             {hasEscalation && (
               <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-red-700">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse" />

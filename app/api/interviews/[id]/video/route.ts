@@ -4,6 +4,7 @@ export const maxDuration = 60;
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { caseUnlocked } from '@/lib/case-lock';
 import { storeFile, retrieveFile, createSignedUpload, createSignedDownloadUrl } from '@/lib/storage';
 
 async function authorizeWitness(id: string, token: string | null) {
@@ -72,9 +73,9 @@ export async function POST(
   return NextResponse.json({ ok: true });
 }
 
-// Serve video (authenticated officers only)
+// Serve video (authenticated officers only; PIN-locked cases need the key)
 export async function GET(
-  _req: NextRequest,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   const session = await getServerSession(authOptions);
@@ -87,10 +88,14 @@ export async function GET(
       id: params.id,
       case: { officerId },
     },
+    include: { case: { select: { id: true, pinHash: true } } },
   });
 
   if (!interview || !interview.videoPath) {
     return new NextResponse('Not found', { status: 404 });
+  }
+  if (!caseUnlocked(interview.case, req)) {
+    return new NextResponse('This case is PIN-protected', { status: 403 });
   }
 
   // Prefer a time-limited signed URL so the recording streams straight from

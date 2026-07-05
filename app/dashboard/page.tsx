@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import CaseCard from '@/components/Dashboard/CaseCard';
 import TopNav from '@/components/Dashboard/TopNav';
 import EscalationBanner from '@/components/Dashboard/EscalationBanner';
+import ObservationCheck, { SolvedChallenge } from '@/components/ObservationCheck';
+import { setCaseKey } from '@/lib/case-key';
 
 interface Interview {
   id: string;
@@ -21,6 +23,7 @@ interface Case {
   incidentType: string;
   description: string;
   createdAt: string;
+  locked?: boolean;
   interviews: Interview[];
 }
 
@@ -35,7 +38,7 @@ function Skeleton() {
 }
 
 export default function DashboardPage() {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
   const [cases, setCases] = useState<Case[] | null>(null);
   const [showForm, setShowForm] = useState(false);
@@ -44,8 +47,12 @@ export default function DashboardPage() {
   const [incidentType, setIncidentType] = useState('');
   const [description, setDescription] = useState('');
   const [reportFile, setReportFile] = useState<File | null>(null);
+  const [pin, setPin] = useState('');
+  const [challenge, setChallenge] = useState<SolvedChallenge | null>(null);
   const [creating, setCreating] = useState(false);
   const [formError, setFormError] = useState('');
+
+  const isDemo = session?.user?.email === 'demo@themis.app';
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/login');
@@ -61,6 +68,14 @@ export default function DashboardPage() {
 
   const handleCreateCase = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isDemo && !/^\d{4}$/.test(pin)) {
+      setFormError('Set a 4-digit PIN to protect your case');
+      return;
+    }
+    if (isDemo && !challenge) {
+      setFormError('Complete the observation check first');
+      return;
+    }
     setCreating(true);
     setFormError('');
 
@@ -81,7 +96,14 @@ export default function DashboardPage() {
     const res = await fetch('/api/cases', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ caseNumber, incidentType, description, reportPath, reportText }),
+      body: JSON.stringify({
+        caseNumber,
+        incidentType,
+        description,
+        reportPath,
+        reportText,
+        ...(isDemo ? { pin, challenge } : {}),
+      }),
     });
 
     const data = await res.json();
@@ -89,13 +111,18 @@ export default function DashboardPage() {
 
     if (!res.ok) {
       setFormError(data.error || 'Failed to create case');
+      // A spent or expired challenge needs a fresh one.
+      if (String(data.error || '').toLowerCase().includes('observation')) setChallenge(null);
     } else {
+      if (data.caseKey) setCaseKey(data.id, data.caseKey);
       setCases((prev) => [{ ...data, interviews: [] }, ...(prev || [])]);
       setShowForm(false);
       setCaseNumber('');
       setIncidentType('');
       setDescription('');
       setReportFile(null);
+      setPin('');
+      setChallenge(null);
     }
   };
 
@@ -233,12 +260,37 @@ export default function DashboardPage() {
               </div>
             </div>
 
+            {isDemo && (
+              <div className="grid sm:grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="block text-sm text-muted mb-1.5">
+                    Case PIN <span className="text-faint">(4 digits, protects this case from other visitors)</span>
+                  </label>
+                  <input
+                    value={pin}
+                    onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                    required
+                    inputMode="numeric"
+                    autoComplete="off"
+                    placeholder="0000"
+                    className="w-32 bg-white border border-line rounded-sm px-4 py-2 text-ink font-mono text-lg tracking-[0.4em] text-center focus:border-accent outline-none transition-colors"
+                  />
+                  <p className="text-faint text-xs mt-2 leading-relaxed">
+                    Only someone with this PIN can open the case, its interviews, and its
+                    reports. PINs cannot be recovered; the demo workspace is cleared
+                    periodically.
+                  </p>
+                </div>
+                <ObservationCheck onChange={setChallenge} />
+              </div>
+            )}
+
             {formError && <p className="text-red-700 text-sm">{formError}</p>}
 
             <div className="flex gap-3 pt-1">
               <button
                 type="submit"
-                disabled={creating}
+                disabled={creating || (isDemo && (!challenge || pin.length !== 4))}
                 className="px-5 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-sm transition-colors disabled:opacity-60"
               >
                 {creating ? 'Creating...' : 'Create case'}

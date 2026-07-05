@@ -25,6 +25,9 @@ model Case {
   caseNumber   String      @unique
   incidentType String
   description  String
+  // Demo-workspace privacy: bcrypt hash of a 4-digit PIN set at creation.
+  // Null = case is open to every visitor of the shared workspace.
+  pinHash      String?
   reportPath   String?
   // Text extracted from the uploaded report at upload time, so the turn
   // engine never re-downloads and re-parses the PDF mid-interview.

@@ -98,6 +98,14 @@ PHASE DISCIPLINE:
 You are told the current phase, its purpose, how many exchanges have occurred in it, and its minimum/maximum. Respect the phase's purpose strictly (e.g. never touch case substance during rapport or narrative practice). If "must_advance" is true you MUST choose "advance_phase" (or "end_interview" if in closing). If "may_advance" is false you may NOT advance.
 When you choose "advance_phase", also provide in "question" a one-sentence warm transition in the witness's language (the system will speak the next phase's scripted opening after it).
 
+EFFICIENCY AND NON-REPETITION (hard requirements):
+- The whole interview must finish in under seven minutes. You are told elapsed_minutes each turn; pace yourself. Early phases are warm but brief: one exchange is usually enough.
+- NEVER ask for information the witness has already given anywhere in the transcript, and never re-ask a question that means the same as an earlier one, even reworded. If the fact is already on the record, pursue the next gap or advance the phase.
+- Every question must pursue material facts about this specific incident: people and their appearance, actions, order of events, objects, places, times, words spoken. If a candidate question does not serve that, do not ask it; advance instead.
+- No filler questions, no small talk outside rapport, no repeated wellbeing checks unless distress is elevated.
+- If the witness's answer was short or says they have nothing to add, do not push the same topic again; move on.
+- When "wrap_up" is true, ask at most one final essential question and then advance; strongly prefer reaching closing.
+
 OUTPUT: respond with ONLY a valid JSON object, no markdown, exactly this shape:
 {
   "safety": {"distress_level": "none|mild|elevated|critical", "ongoing_danger": false, "self_harm_risk": false, "note": "one short sentence"},
@@ -121,6 +129,8 @@ export function buildDecisionPrompt({
   previousInterviews,
   language,
   latestUtterance,
+  elapsedMinutes,
+  wrapUp,
 }: {
   phase: string;
   phaseDescription: string;
@@ -135,6 +145,8 @@ export function buildDecisionPrompt({
   previousInterviews: string;
   language: 'en' | 'ur';
   latestUtterance: string;
+  elapsedMinutes: number;
+  wrapUp: boolean;
 }): string {
   const transcriptText = transcript
     .slice(-40)
@@ -151,6 +163,8 @@ CURRENT PHASE: ${phase}; ${phaseDescription}
 Exchanges in this phase: ${exchangeCount} (minimum ${minExchanges}, maximum ${maxExchanges})
 may_advance: ${mayAdvance}
 must_advance: ${mustAdvance}
+elapsed_minutes: ${elapsedMinutes.toFixed(1)} (the whole interview must finish under 7)
+wrap_up: ${wrapUp}
 Witness language: ${language === 'ur' ? 'Urdu; everything you speak must be in simple Pakistani Urdu' : 'English'}
 ${stopAlreadyConfirmedOnce ? 'NOTE: The witness previously asked to stop and you already asked them to confirm. If this utterance confirms they want to stop, choose "end_interview". If they want to continue, continue normally.' : ''}
 

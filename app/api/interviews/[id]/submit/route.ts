@@ -24,10 +24,13 @@ export async function PATCH(
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
+  const safeName =
+    typeof victimName === 'string' ? victimName.trim().slice(0, 120) : undefined;
+
   await prisma.interview.update({
     where: { id: params.id },
     data: {
-      ...(victimName !== undefined && { victimName, consentName: victimName }),
+      ...(safeName !== undefined && { victimName: safeName, consentName: safeName }),
       ...(victimAge !== undefined && victimAge !== '' && { victimAge: Number(victimAge) }),
       ...(language !== undefined && { language }),
       consentAt: new Date(),

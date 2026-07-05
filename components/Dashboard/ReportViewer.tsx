@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import type { AnalysisResult } from '@/lib/linguistic-analysis';
+import { caseKeyQuery } from '@/lib/case-key';
 
 interface LiveNote {
   turn: number;
@@ -40,6 +41,8 @@ interface ReportViewerProps {
       followUpQuestions?: string[];
     } | null;
   };
+  // For PIN-locked demo cases: PDF/video links carry the unlock key as ?ck=.
+  caseId?: string;
 }
 
 const severityCls: Record<string, string> = {
@@ -51,8 +54,9 @@ const severityCls: Record<string, string> = {
   major: 'bg-red-50 text-red-800 border-red-200',
 };
 
-export default function ReportViewer({ interview }: ReportViewerProps) {
+export default function ReportViewer({ interview, caseId }: ReportViewerProps) {
   const [tab, setTab] = useState<'analysis' | 'transcript' | 'observations' | 'video'>('analysis');
+  const ck = caseId ? caseKeyQuery(caseId) : '';
 
   const analysis = interview.linguisticFlags;
   const contraData = interview.contradictions;
@@ -315,7 +319,7 @@ export default function ReportViewer({ interview }: ReportViewerProps) {
         <div className="bg-white rounded-xl border border-line p-5">
           <video
             controls
-            src={`/api/interviews/${interview.id}/video`}
+            src={`/api/interviews/${interview.id}/video${ck}`}
             className="w-full rounded-lg bg-ink max-h-[28rem]"
           />
           <p className="text-faint text-xs mt-3">
@@ -327,14 +331,14 @@ export default function ReportViewer({ interview }: ReportViewerProps) {
       {/* PDF Downloads */}
       <div className="flex gap-3 flex-wrap">
         <a
-          href={`/api/pdf/${interview.id}/court`}
+          href={`/api/pdf/${interview.id}/court${ck}`}
           download={`themis-court-report-${interview.id}.pdf`}
           className="px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-lg transition-colors"
         >
           Court report (PDF)
         </a>
         <a
-          href={`/api/pdf/${interview.id}/police`}
+          href={`/api/pdf/${interview.id}/police${ck}`}
           download={`themis-police-report-${interview.id}.pdf`}
           className="px-4 py-2 bg-white border border-line hover:border-faint text-ink text-sm font-medium rounded-lg transition-colors"
         >

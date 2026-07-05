@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+import { caseUnlocked } from '@/lib/case-lock';
 
 export async function GET(
   req: NextRequest,
@@ -30,5 +31,18 @@ export async function GET(
 
   if (!interview) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  return NextResponse.json(interview);
+  if (!caseUnlocked(interview.case, req)) {
+    return NextResponse.json(
+      {
+        error: 'This case is PIN-protected',
+        locked: true,
+        caseId: interview.case.id,
+        caseNumber: interview.case.caseNumber,
+      },
+      { status: 403 }
+    );
+  }
+
+  const { pinHash, ...safeCase } = interview.case;
+  return NextResponse.json({ ...interview, case: { ...safeCase, locked: !!pinHash } });
 }
