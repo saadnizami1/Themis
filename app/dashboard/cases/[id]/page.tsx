@@ -10,6 +10,8 @@ import TopNav from '@/components/Dashboard/TopNav';
 import PinGate from '@/components/Dashboard/PinGate';
 import { caseKeyHeaders } from '@/lib/case-key';
 
+const LINK_TTL_MS = 72 * 60 * 60 * 1000;
+
 interface Interview {
   id: string;
   status: string;
@@ -19,6 +21,7 @@ interface Interview {
   completedAt: string | null;
   accessToken: string;
   victimName: string | null;
+  transcript?: Array<{ role: string }> | null;
   contradictions: {
     items?: Array<{ topic: string; severity: string }>;
   } | null;
@@ -167,8 +170,9 @@ export default function CaseDetailPage() {
               </button>
             </div>
             <p className="text-emerald-800/70 text-xs mt-2">
-              Send this to the witness. No sign-in needed. Works best in Chrome or Edge with a
-              microphone and camera; typing is available as a fallback.
+              Send this to the witness. No sign-in needed. The link is valid for 72 hours and
+              the interview must be completed within that window. Works best in Chrome or Edge
+              with a microphone and camera; typing is available as a fallback.
             </p>
           </div>
         )}
@@ -187,7 +191,13 @@ export default function CaseDetailPage() {
             <div className="space-y-3">
               {caseData.interviews.map((iv) => {
                 const contraCount = iv.contradictions?.items?.length || 0;
-                const hasReport = ['completed', 'terminated', 'escalated'].includes(iv.status);
+                const hasSpokenContent =
+                  Array.isArray(iv.transcript) &&
+                  iv.transcript.some((e) => e.role !== 'event');
+                const hasReport =
+                  ['completed', 'terminated', 'escalated'].includes(iv.status) ||
+                  (iv.status === 'expired' && hasSpokenContent);
+                const expiresAt = new Date(new Date(iv.createdAt).getTime() + LINK_TTL_MS);
                 return (
                   <div
                     key={iv.id}
@@ -213,6 +223,9 @@ export default function CaseDetailPage() {
                         <p className="text-faint text-xs mt-1">
                           Created {new Date(iv.createdAt).toLocaleDateString()}
                           {iv.completedAt && ` · ended ${new Date(iv.completedAt).toLocaleString()}`}
+                          {(iv.status === 'pending' || iv.status === 'in_progress') &&
+                            ` · link valid until ${expiresAt.toLocaleString()}`}
+                          {iv.status === 'expired' && !hasSpokenContent && ' · link was never used'}
                         </p>
                       </div>
                     </div>

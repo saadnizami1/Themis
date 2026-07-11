@@ -18,6 +18,7 @@ const VideoRecorder = dynamic(() => import('@/components/InterviewUI/VideoRecord
 type Step =
   | 'loading'
   | 'error'
+  | 'expired'
   | 'language'
   | 'consent'
   | 'briefing'
@@ -85,6 +86,11 @@ export default function InterviewPage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ token, event }),
         });
+        if (res.status === 410) {
+          const data = await res.json().catch(() => ({}));
+          if (data.error === 'expired') setStep('expired');
+          return null;
+        }
         if (!res.ok) return null;
         return (await res.json()) as TurnResponse;
       } catch {
@@ -216,7 +222,7 @@ export default function InterviewPage() {
       .then(async (r) => {
         const data = await r.json();
         if (r.status === 410) {
-          setStep('already-completed');
+          setStep(data.error === 'expired' ? 'expired' : 'already-completed');
           return;
         }
         if (!r.ok || data.error) {
@@ -316,6 +322,21 @@ export default function InterviewPage() {
 
   if (step === 'already-completed')
     return centered(card(<p className={`text-ink ${urduCls}`}>{t(lang, 'alreadyCompleted')}</p>));
+
+  if (step === 'expired')
+    return centered(
+      card(
+        <>
+          <p className="text-ink leading-relaxed">
+            This interview link has expired. Links are valid for 72 hours. Please ask the
+            investigating officer to send you a new one.
+          </p>
+          <p className="font-urdu text-ink text-base leading-loose text-right" dir="rtl">
+            اس انٹرویو کا لنک ختم ہو چکا ہے۔ لنک 72 گھنٹے کے لیے کارآمد ہوتا ہے۔ براہ کرم تفتیشی افسر سے نیا لنک طلب کریں۔
+          </p>
+        </>
+      )
+    );
 
   if (step === 'language')
     return centered(

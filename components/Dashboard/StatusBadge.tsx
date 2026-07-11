@@ -4,6 +4,7 @@ const styles: Record<string, { dot: string; text: string; pulse?: boolean }> = {
   completed: { dot: 'bg-accent', text: 'text-ink' },
   terminated: { dot: 'bg-faint', text: 'text-muted' },
   escalated: { dot: 'bg-red-600', text: 'text-red-700', pulse: true },
+  expired: { dot: 'bg-faint', text: 'text-faint' },
 };
 
 const labels: Record<string, string> = {
@@ -12,6 +13,7 @@ const labels: Record<string, string> = {
   completed: 'Completed',
   terminated: 'Ended early',
   escalated: 'Escalated',
+  expired: 'Expired',
 };
 
 export default function StatusBadge({ status }: { status: string }) {

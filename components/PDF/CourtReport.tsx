@@ -74,6 +74,7 @@ interface CourtReportProps {
     id: string;
     interviewNumber: number;
     language: string;
+    status?: string;
     victimName?: string | null;
     victimAge?: number | null;
     completedAt?: Date | string | null;
@@ -111,6 +112,16 @@ export function CourtReport({ interview, caseData, officerName, totalInterviews 
       })
     : 'N/A';
 
+  const statusLabels: Record<string, string> = {
+    completed: 'Completed in full',
+    terminated: 'Ended early at the witness’s request',
+    escalated: 'Paused by safety escalation',
+    expired: 'Interview link expired before completion',
+  };
+  const status = interview.status || 'completed';
+  const statusLabel = statusLabels[status] || status;
+  const incomplete = status !== 'completed';
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
@@ -129,8 +140,17 @@ export function CourtReport({ interview, caseData, officerName, totalInterviews 
             Witness: {interview.victimName || 'Not provided'}{interview.victimAge ? `, Age ${interview.victimAge}` : ''}
           </Text>
           <Text style={styles.body}>Interview Language: {interview.language === 'ur' ? 'Urdu' : 'English'}</Text>
+          <Text style={styles.body}>Completion Status: {statusLabel}</Text>
           <Text style={styles.body}>Interview Reference: {interview.id}</Text>
         </View>
+
+        {incomplete && (
+          <Text style={[styles.body, { color: '#8a5a00', fontStyle: 'italic' }]}>
+            Note: this interview did not run to full completion ({statusLabel.toLowerCase()}).
+            The summary, assessment, and transcript below cover only the portion of the
+            interview that took place, and must be read with that limitation in mind.
+          </Text>
+        )}
 
         {/* Methodology */}
         <Text style={styles.sectionHeader}>1. Interview Methodology</Text>

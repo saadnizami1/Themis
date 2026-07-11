@@ -6,6 +6,7 @@ import { prisma } from '@/lib/prisma';
 import { hashPin, isValidPin, mintCaseKey } from '@/lib/case-lock';
 import { verifyChallenge } from '@/lib/challenge';
 import { rateLimit, clientIp, tooMany } from '@/lib/rate-limit';
+import { sweepExpiredForOfficer } from '@/lib/expiry';
 
 const DEMO_EMAIL = 'demo@themis.app';
 const DEMO_MAX_ACTIVE_CASES = 30;
@@ -16,6 +17,9 @@ export async function GET() {
 
   const officerId = (session.user as { id?: string }).id;
   if (!officerId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  // 72-hour link expiry is applied lazily on read.
+  await sweepExpiredForOfficer(officerId);
 
   const cases = await prisma.case.findMany({
     where: { officerId },

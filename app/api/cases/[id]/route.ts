@@ -4,6 +4,7 @@ export const dynamic = 'force-dynamic';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { caseUnlocked } from '@/lib/case-lock';
+import { sweepExpiredForCase } from '@/lib/expiry';
 
 export async function GET(
   req: NextRequest,
@@ -13,6 +14,9 @@ export async function GET(
   if (!session?.user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const officerId = (session.user as { id?: string }).id;
+
+  // 72-hour link expiry is applied lazily on read.
+  await sweepExpiredForCase(params.id);
 
   const c = await prisma.case.findFirst({
     where: { id: params.id, officerId },

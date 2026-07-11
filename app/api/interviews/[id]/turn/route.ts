@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { runTurn } from '@/lib/interview-engine';
 import type { TurnEvent } from '@/lib/interview-engine';
 import { rateLimit, clientIp, tooMany } from '@/lib/rate-limit';
+import { isPastExpiry } from '@/lib/expiry';
 
 // The single agentic endpoint driving the interview. The witness client sends
 // events; the engine decides what Themis does next. Access is gated by the
@@ -37,13 +38,19 @@ export async function POST(
 
   const interview = await prisma.interview.findUnique({
     where: { id: params.id },
-    select: { accessToken: true, status: true },
+    select: { accessToken: true, status: true, createdAt: true },
   });
   if (!interview || interview.accessToken !== token) {
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
   if (interview.status === 'completed' || interview.status === 'terminated') {
     return NextResponse.json({ error: 'Interview already ended' }, { status: 410 });
+  }
+  if (interview.status === 'expired' || isPastExpiry(interview)) {
+    if (interview.status !== 'expired') {
+      await prisma.interview.update({ where: { id: params.id }, data: { status: 'expired' } });
+    }
+    return NextResponse.json({ error: 'expired' }, { status: 410 });
   }
 
   try {

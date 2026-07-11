@@ -118,7 +118,17 @@ export function PoliceReport({ interview, caseData, officerName }: PoliceReportP
 
         {/* Interview Status */}
         <Text style={styles.sectionHeader}>2. Interview Status</Text>
-        <Text style={styles.body}>Status: {interview.status}</Text>
+        <Text style={styles.body}>
+          Status:{' '}
+          {{
+            completed: 'Completed in full',
+            terminated: 'Ended early at the witness request',
+            escalated: 'Paused by safety escalation',
+            expired: 'Link expired before completion (partial record)',
+            in_progress: 'In progress',
+            pending: 'Pending',
+          }[interview.status] || interview.status}
+        </Text>
         <Text style={styles.body}>Language: {interview.language === 'ur' ? 'Urdu' : 'English'}</Text>
         <Text style={styles.body}>
           Duration: {durationMin !== null ? `${durationMin} minutes` : 'N/A'}

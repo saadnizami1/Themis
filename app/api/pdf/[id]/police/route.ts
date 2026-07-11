@@ -33,8 +33,14 @@ export async function GET(
   if (!caseUnlocked(interview.case, req)) {
     return new NextResponse('This case is PIN-protected', { status: 403 });
   }
-  if (!['completed', 'terminated', 'escalated'].includes(interview.status)) {
+  if (!['completed', 'terminated', 'escalated', 'expired'].includes(interview.status)) {
     return new NextResponse('Interview not yet completed', { status: 400 });
+  }
+  const spokenEntries = ((interview.transcript as unknown as Array<{ role: string }>) || []).filter(
+    (e) => e.role !== 'event'
+  );
+  if (spokenEntries.length === 0) {
+    return new NextResponse('No interview content to report', { status: 400 });
   }
 
   const props = {

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 export const dynamic = 'force-dynamic';
 import { prisma } from '@/lib/prisma';
+import { isPastExpiry, linkExpiresAt } from '@/lib/expiry';
 
 // Witness uses this to validate their link and get the interview state
 // (including enough to resume an interrupted session).
@@ -18,6 +19,7 @@ export async function GET(
       currentPhase: true,
       consentAt: true,
       victimName: true,
+      createdAt: true,
     },
   });
 
@@ -30,5 +32,17 @@ export async function GET(
     );
   }
 
-  return NextResponse.json(interview);
+  // Links live for 72 hours; a late visit flips the interview to expired.
+  if (interview.status === 'expired' || isPastExpiry(interview)) {
+    if (interview.status !== 'expired') {
+      await prisma.interview.update({
+        where: { id: interview.id },
+        data: { status: 'expired' },
+      });
+    }
+    return NextResponse.json({ error: 'expired', status: 'expired' }, { status: 410 });
+  }
+
+  const { createdAt, ...rest } = interview;
+  return NextResponse.json({ ...rest, expiresAt: linkExpiresAt(createdAt) });
 }
