@@ -94,47 +94,60 @@ export default function LandingPage() {
     <div className="min-h-screen bg-paper flex flex-col overflow-x-clip">
       <SiteHeader />
 
-      {/* Hero */}
-      <section className="border-b border-line">
-        <div className="max-w-6xl mx-auto px-5 pt-16 sm:pt-24 pb-16 sm:pb-24">
+      {/* Hero: full-bleed dark record room */}
+      <section className="bg-ink text-paper overflow-hidden">
+        <div className="max-w-6xl mx-auto px-5 pt-10 sm:pt-14 pb-16 sm:pb-24">
+          {/* Ruled meta strip */}
           <Reveal>
-            <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
-              Pilot programme 2026 &nbsp;/&nbsp; NICHD protocol &nbsp;/&nbsp; English and Urdu
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-white/15 pb-5 font-mono text-[11px] uppercase tracking-[0.14em] text-paper/50">
+              <span>Pilot programme 2026</span>
+              <span className="hidden sm:inline">NICHD protocol</span>
+              <span>English / Urdu</span>
+            </div>
           </Reveal>
-          <div className="grid lg:grid-cols-[1fr_minmax(0,26rem)] gap-12 lg:gap-16 items-end mt-8">
-            <div>
-              <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl leading-[1.04] tracking-tight max-w-3xl">
-                <RevealHeading text="Nothing suggested." stagger={90} />
-                <br />
-                <RevealHeading
-                  text="Everything on the record."
-                  stagger={90}
-                  delay={220}
-                  className="italic"
-                />
-              </h1>
+
+          {/* Display headline */}
+          <h1 className="font-serif tracking-tight leading-[0.98] mt-10 sm:mt-14 text-[14.5vw] sm:text-[5.4rem] lg:text-[7rem] xl:text-[7.6rem]">
+            <RevealHeading text="Nothing suggested." stagger={90} />
+            <br />
+            <RevealHeading
+              text="Everything on the record."
+              stagger={70}
+              delay={280}
+              className="italic text-[#BACFC1]"
+            />
+          </h1>
+
+          <div className="grid lg:grid-cols-[1fr_minmax(0,27rem)] gap-12 lg:gap-20 items-start mt-12 sm:mt-16">
+            <div className="max-w-xl">
               <Reveal delay={500}>
-                <p className="text-muted text-lg mt-8 leading-relaxed max-w-xl">
+                <p className="text-paper/70 text-lg leading-relaxed">
                   Themis conducts recorded witness interviews for police investigations. It
                   follows the NICHD protocol, screens every question before speaking it, and
                   produces court-ready records.
                 </p>
               </Reveal>
               <Reveal delay={600}>
-                <div className="flex flex-col sm:flex-row sm:items-center gap-5 mt-10">
-                  <DemoButton className="px-6 py-3 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-sm transition-colors text-center disabled:opacity-60" />
+                <div className="flex flex-col sm:flex-row sm:items-center gap-5 mt-9">
+                  <DemoButton className="px-6 py-3 bg-paper hover:bg-white text-ink text-sm font-medium rounded-sm transition-colors text-center disabled:opacity-60" />
                   <Link
                     href="/research"
-                    className="text-sm text-ink border-b border-ink/30 hover:border-ink pb-0.5 transition-colors w-fit"
+                    className="text-sm text-paper/90 border-b border-paper/40 hover:border-paper pb-0.5 transition-colors w-fit"
                   >
                     Read the design notes
                   </Link>
                 </div>
               </Reveal>
+              <Reveal delay={700}>
+                <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-paper/40 mt-12">
+                  No polygraph &nbsp;/&nbsp; No biometrics &nbsp;/&nbsp; No lie detection
+                </p>
+              </Reveal>
             </div>
-            <Reveal delay={300}>
-              <SpecimenReplay />
+            <Reveal delay={350}>
+              <div className="shadow-[14px_14px_0_rgba(251,250,246,0.07)]">
+                <SpecimenReplay />
+              </div>
             </Reveal>
           </div>
         </div>

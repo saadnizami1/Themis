@@ -504,6 +504,18 @@ export default function InterviewPage() {
       <main className="flex-1 flex flex-col max-w-2xl mx-auto w-full px-5 py-6 gap-5">
         <StateIndicator state={speech.state} label={statusLabel} />
 
+        {speech.voiceMissing && lang === 'ur' && (
+          <div className="bg-amber-50 border border-amber-200 rounded-sm px-4 py-3 space-y-1">
+            <p className="text-amber-800 text-sm font-urdu text-right leading-relaxed" dir="rtl">
+              اس آلے پر اردو آواز دستیاب نہیں، اس لیے سوالات تحریری صورت میں دکھائے جا رہے ہیں۔
+            </p>
+            <p className="text-amber-800/80 text-xs">
+              No Urdu voice is installed on this device, so questions are shown as text.
+              Microsoft Edge and most phones speak Urdu aloud.
+            </p>
+          </div>
+        )}
+
         {/* Current question */}
         <div
           className={`bg-white rounded-2xl border border-line px-5 sm:px-7 py-5 ${

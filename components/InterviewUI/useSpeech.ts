@@ -32,6 +32,50 @@ const REPEAT_PATTERNS = [
   /دوبارہ (کہیں|بتائیں|پوچھیں)/,
 ];
 
+// Voices load asynchronously in most browsers; the first getVoices() call
+// often returns []. Resolve them once and cache.
+let cachedVoices: SpeechSynthesisVoice[] = [];
+function ensureVoices(timeoutMs = 1500): Promise<SpeechSynthesisVoice[]> {
+  return new Promise((resolve) => {
+    if (!('speechSynthesis' in window)) return resolve([]);
+    const now = window.speechSynthesis.getVoices();
+    if (now.length > 0) {
+      cachedVoices = now;
+      return resolve(now);
+    }
+    const timer = setTimeout(() => resolve(window.speechSynthesis.getVoices()), timeoutMs);
+    window.speechSynthesis.onvoiceschanged = () => {
+      clearTimeout(timer);
+      cachedVoices = window.speechSynthesis.getVoices();
+      resolve(cachedVoices);
+    };
+  });
+}
+
+// Best voice for the language. For Urdu, prefer Pakistani voices and the
+// higher-quality "Natural/Online" ones Edge exposes; never fall back to a
+// non-Urdu voice (an English voice cannot read the script).
+function pickVoice(voices: SpeechSynthesisVoice[], lang: Lang): SpeechSynthesisVoice | null {
+  if (lang === 'ur') {
+    const urdu = voices.filter(
+      (v) => v.lang.toLowerCase().startsWith('ur') || /urdu/i.test(v.name)
+    );
+    if (urdu.length === 0) return null;
+    return (
+      urdu.find((v) => /natural|online/i.test(v.name) && v.lang.toLowerCase() === 'ur-pk') ||
+      urdu.find((v) => v.lang.toLowerCase() === 'ur-pk') ||
+      urdu[0]
+    );
+  }
+  const en = voices.filter((v) => v.lang.toLowerCase().startsWith('en'));
+  return (
+    en.find((v) => /natural|online/i.test(v.name) && v.lang.toLowerCase() === 'en-us') ||
+    en.find((v) => v.lang.toLowerCase() === 'en-us') ||
+    en[0] ||
+    null
+  );
+}
+
 export function useSpeech({
   lang,
   onAutoSubmit,
@@ -44,8 +88,14 @@ export function useSpeech({
   const [buffer, setBuffer] = useState('');
   const [interim, setInterim] = useState('');
   const [ttsSupported, setTtsSupported] = useState(true);
+  // True when the device has no voice for the chosen language (typically
+  // Urdu on browsers without an Urdu voice pack). Questions appear as text.
+  const [voiceMissing, setVoiceMissing] = useState(false);
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);
+  // Each speak() bumps the epoch; stale watchdogs from an earlier utterance
+  // must never fire into a newer one (they would open the mic mid-speech).
+  const speakEpochRef = useRef(0);
   const finalRef = useRef('');
   const stateRef = useRef<SpeechState>('idle');
   const silenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -188,35 +238,59 @@ export function useSpeech({
       setBuffer('');
       setInterim('');
 
-      if (!('speechSynthesis' in window)) {
-        setTtsSupported(false);
-        // No TTS, go straight to listening so the interview still works
-        if (opts?.thenListen) startListening();
-        else setStateBoth('idle');
-        opts?.onDone?.();
-        return;
-      }
-
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.lang = lang === 'ur' ? 'ur-PK' : 'en-US';
-      utter.rate = 0.92;
-      const voices = window.speechSynthesis.getVoices();
-      const preferred = voices.find((v) => v.lang.startsWith(lang === 'ur' ? 'ur' : 'en'));
-      if (preferred) utter.voice = preferred;
-
+      const epoch = ++speakEpochRef.current;
       const finish = () => {
+        if (speakEpochRef.current !== epoch) return;
         // Grace period: let the audio tail fade before the mic opens
         setTimeout(() => {
+          if (speakEpochRef.current !== epoch) return;
           if (opts?.thenListen) startListening();
           else setStateBoth('idle');
           opts?.onDone?.();
         }, 350);
       };
-      utter.onend = finish;
-      utter.onerror = finish;
 
-      window.speechSynthesis.speak(utter);
+      if (!('speechSynthesis' in window)) {
+        setTtsSupported(false);
+        // No TTS, go straight to listening so the interview still works
+        finish();
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      void ensureVoices().then((voices) => {
+        const voice = pickVoice(voices.length ? voices : cachedVoices, lang);
+
+        if (lang === 'ur' && !voice) {
+          // No Urdu voice on this device. Speaking Urdu text with an English
+          // voice produces gibberish or silence, so show the question as
+          // text instead and keep the flow moving.
+          setVoiceMissing(true);
+          finish();
+          return;
+        }
+        setVoiceMissing(false);
+
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = lang === 'ur' ? 'ur-PK' : 'en-US';
+        utter.rate = lang === 'ur' ? 0.9 : 0.92;
+        if (voice) utter.voice = voice;
+
+        let done = false;
+        const once = () => {
+          if (done) return;
+          done = true;
+          finish();
+        };
+        utter.onend = once;
+        utter.onerror = once;
+        // Watchdog: some engines never fire onend for unsupported voices.
+        const expectedMs = Math.min(60_000, 4000 + text.length * 90);
+        setTimeout(once, expectedMs);
+
+        window.speechSynthesis.speak(utter);
+      });
     },
     [lang, startListening, stopListening]
   );
@@ -252,6 +326,7 @@ export function useSpeech({
     buffer,
     interim,
     ttsSupported,
+    voiceMissing,
     speak,
     startListening,
     takeBuffer,
