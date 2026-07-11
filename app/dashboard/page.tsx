@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import CaseCard from '@/components/Dashboard/CaseCard';
 import TopNav from '@/components/Dashboard/TopNav';
 import EscalationBanner from '@/components/Dashboard/EscalationBanner';
-import ObservationCheck, { SolvedChallenge } from '@/components/ObservationCheck';
+import QuickCheck, { SolvedChallenge } from '@/components/QuickCheck';
 import { setCaseKey } from '@/lib/case-key';
 
 interface Interview {
@@ -73,7 +73,7 @@ export default function DashboardPage() {
       return;
     }
     if (isDemo && !challenge) {
-      setFormError('Complete the observation check first');
+      setFormError('Complete the quick check first');
       return;
     }
     setCreating(true);
@@ -112,7 +112,7 @@ export default function DashboardPage() {
     if (!res.ok) {
       setFormError(data.error || 'Failed to create case');
       // A spent or expired challenge needs a fresh one.
-      if (String(data.error || '').toLowerCase().includes('observation')) setChallenge(null);
+      if (String(data.error || '').toLowerCase().includes('check failed')) setChallenge(null);
     } else {
       if (data.caseKey) setCaseKey(data.id, data.caseKey);
       setCases((prev) => [{ ...data, interviews: [] }, ...(prev || [])]);
@@ -281,7 +281,7 @@ export default function DashboardPage() {
                     periodically.
                   </p>
                 </div>
-                <ObservationCheck onChange={setChallenge} />
+                <QuickCheck onChange={setChallenge} />
               </div>
             )}
 

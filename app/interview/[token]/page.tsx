@@ -18,6 +18,7 @@ const VideoRecorder = dynamic(() => import('@/components/InterviewUI/VideoRecord
 type Step =
   | 'loading'
   | 'error'
+  | 'language'
   | 'consent'
   | 'briefing'
   | 'resume-prompt'
@@ -229,7 +230,8 @@ export default function InterviewPage() {
         } else if (data.status === 'in_progress' && data.consentAt) {
           setStep('resume-prompt');
         } else {
-          setStep('consent');
+          // The witness chooses their language before anything else.
+          setStep('language');
         }
       })
       .catch(() => setStep('error'));
@@ -314,6 +316,55 @@ export default function InterviewPage() {
 
   if (step === 'already-completed')
     return centered(card(<p className={`text-ink ${urduCls}`}>{t(lang, 'alreadyCompleted')}</p>));
+
+  if (step === 'language')
+    return centered(
+      <div className="max-w-md w-full bg-white border border-line p-6 sm:p-8 space-y-6 animate-fadeUp">
+        <div className="text-center">
+          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">Themis</p>
+          <h1 className="font-serif text-2xl sm:text-3xl tracking-tight text-ink mt-3">
+            Choose your language.
+          </h1>
+          <p className="font-urdu text-lg text-ink mt-1" dir="rtl">
+            اپنی زبان منتخب کریں
+          </p>
+        </div>
+        <div className="grid gap-3">
+          <button
+            onClick={() => {
+              setLang('en');
+              setStep('consent');
+            }}
+            className="group border border-line hover:border-accent p-5 text-left rounded-sm transition-colors"
+          >
+            <span className="block text-ink font-medium text-lg group-hover:text-accent transition-colors">
+              English
+            </span>
+            <span className="block text-muted text-sm mt-1">
+              The whole interview, spoken and written, will be in English.
+            </span>
+          </button>
+          <button
+            onClick={() => {
+              setLang('ur');
+              setStep('consent');
+            }}
+            className="group border border-line hover:border-accent p-5 text-right rounded-sm transition-colors"
+            dir="rtl"
+          >
+            <span className="block text-ink font-urdu font-medium text-xl group-hover:text-accent transition-colors">
+              اردو
+            </span>
+            <span className="block text-muted font-urdu text-base mt-1.5 leading-relaxed">
+              پورا انٹرویو، بول چال اور تحریر، اردو میں ہوگا۔
+            </span>
+          </button>
+        </div>
+        <p className="text-faint text-xs text-center">
+          You can ask for a break or stop at any time, in either language.
+        </p>
+      </div>
+    );
 
   if (step === 'consent')
     return centered(<ConsentScreen lang={lang} onLangChange={setLang} onConsent={handleConsent} />);

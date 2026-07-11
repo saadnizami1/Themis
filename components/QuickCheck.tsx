@@ -1,38 +1,30 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-// The observation check: Themis's bot deterrent as a tiny witness exercise.
-// An exhibit of three items appears for five seconds, disappears, and one
-// recall question is asked. Server-rendered SVG; the answer travels only
-// inside an HMAC token.
+// The quick check: one small sum, three options, instant feedback.
+// Server-signed; the answer never appears in the page payload.
 
 export interface SolvedChallenge {
   token: string;
   answer: number;
 }
 
-type Stage = 'loading' | 'memorize' | 'question' | 'solved' | 'error';
+type Stage = 'loading' | 'question' | 'solved' | 'error';
 
-const LOOK_MS = 5000;
-
-export default function ObservationCheck({
+export default function QuickCheck({
   onChange,
 }: {
   onChange: (solved: SolvedChallenge | null) => void;
 }) {
   const [stage, setStage] = useState<Stage>('loading');
-  const [svg, setSvg] = useState('');
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState<string[]>([]);
   const [token, setToken] = useState('');
-  const [progress, setProgress] = useState(0);
   const [missed, setMissed] = useState(false);
   const [checking, setChecking] = useState(false);
-  const rafRef = useRef(0);
 
   const load = useCallback(async (afterMiss: boolean) => {
-    cancelAnimationFrame(rafRef.current);
     setStage('loading');
     setMissed(afterMiss);
     onChange(null);
@@ -40,22 +32,10 @@ export default function ObservationCheck({
       const res = await fetch('/api/challenge');
       if (!res.ok) throw new Error();
       const d = await res.json();
-      setSvg(d.svg);
       setQuestion(d.question);
       setOptions(d.options);
       setToken(d.token);
-      setStage('memorize');
-      const start = performance.now();
-      const tick = (now: number) => {
-        const p = Math.min(1, (now - start) / LOOK_MS);
-        setProgress(p);
-        if (p < 1) {
-          rafRef.current = requestAnimationFrame(tick);
-        } else {
-          setStage('question');
-        }
-      };
-      rafRef.current = requestAnimationFrame(tick);
+      setStage('question');
     } catch {
       setStage('error');
     }
@@ -63,7 +43,6 @@ export default function ObservationCheck({
 
   useEffect(() => {
     load(false);
-    return () => cancelAnimationFrame(rafRef.current);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -95,7 +74,7 @@ export default function ObservationCheck({
     <div className="border border-line bg-white">
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-line">
         <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
-          Observation check
+          Quick check
         </span>
         {stage === 'solved' && (
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
@@ -106,50 +85,38 @@ export default function ObservationCheck({
 
       <div className="p-4">
         {stage === 'loading' && (
-          <div className="h-24 flex items-center justify-center">
-            <span className="text-faint text-sm">Preparing the exhibit...</span>
+          <div className="h-16 flex items-center justify-center">
+            <span className="text-faint text-sm">One moment...</span>
           </div>
         )}
 
         {stage === 'error' && (
-          <div className="h-24 flex flex-col items-center justify-center gap-2">
-            <span className="text-faint text-sm">The exhibit could not be loaded.</span>
-            <button type="button" onClick={() => load(false)} className="text-sm text-ink border-b border-ink/30 hover:border-ink">
+          <div className="h-16 flex flex-col items-center justify-center gap-2">
+            <span className="text-faint text-sm">The check could not be loaded.</span>
+            <button
+              type="button"
+              onClick={() => load(false)}
+              className="text-sm text-ink border-b border-ink/30 hover:border-ink"
+            >
               Try again
             </button>
           </div>
         )}
 
-        {stage === 'memorize' && (
-          <div>
-            <p className="text-muted text-sm mb-3">
-              {missed ? 'Not quite. A new exhibit; look carefully.' : 'A witness notices things. Study the exhibit.'}
-            </p>
-            <div
-              className="mx-auto max-w-[16rem]"
-              dangerouslySetInnerHTML={{ __html: svg }}
-            />
-            <div className="h-px bg-line mt-4 relative overflow-hidden">
-              <div
-                className="absolute inset-y-0 left-0 bg-accent"
-                style={{ width: `${(1 - progress) * 100}%`, height: '2px', top: '-0.5px' }}
-              />
-            </div>
-          </div>
-        )}
-
         {stage === 'question' && (
           <div>
-            <p className="text-ink text-sm font-medium">{question}</p>
-            <p className="text-faint text-xs mt-1">From memory.</p>
-            <div className="grid grid-cols-2 gap-2 mt-3">
+            <p className="text-ink text-sm font-medium">
+              {missed ? 'Not quite. Try this one: ' : ''}
+              {question}
+            </p>
+            <div className="grid grid-cols-3 gap-2 mt-3">
               {options.map((opt, i) => (
                 <button
-                  key={opt}
+                  key={`${opt}-${i}`}
                   type="button"
                   disabled={checking}
                   onClick={() => pick(i)}
-                  className="px-3 py-2 border border-line hover:border-accent hover:text-accent text-ink text-sm rounded-sm transition-colors text-center capitalize disabled:opacity-60"
+                  className="px-3 py-2 border border-line hover:border-accent hover:text-accent text-ink font-mono text-sm rounded-sm transition-colors text-center disabled:opacity-60"
                 >
                   {opt}
                 </button>
@@ -163,9 +130,7 @@ export default function ObservationCheck({
             <svg viewBox="0 0 24 24" className="w-5 h-5 text-accent" fill="none" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
-            <p className="text-muted text-sm">
-              Well observed. You may file the case.
-            </p>
+            <p className="text-muted text-sm">Done. You may file the case.</p>
           </div>
         )}
       </div>

@@ -4,6 +4,7 @@ import SiteFooter from '@/components/Site/SiteFooter';
 import DemoButton from '@/components/Site/DemoButton';
 import { Reveal, StickyPanels, Stat } from '@/components/Site/Scroll';
 import { RevealHeading, TextReveal } from '@/components/Site/Motion';
+import SpecimenReplay from '@/components/Site/SpecimenReplay';
 
 const refusals = [
   'Mention any detail the witness has not raised themselves.',
@@ -88,49 +89,6 @@ const pipeline = [
   ['Speak', 'Only then is the question spoken aloud, in the witness\'s language, and the cycle repeats.'],
 ];
 
-function Specimen() {
-  return (
-    <figure className="border border-line bg-white">
-      <figcaption className="flex items-center justify-between px-5 py-3 border-b border-line">
-        <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
-          Interview record
-        </span>
-        <span className="font-mono text-[11px] tracking-[0.04em] text-faint">
-          FIR-2026-0187 / 02
-        </span>
-      </figcaption>
-      <div className="p-5 sm:p-6 font-mono text-[12.5px] leading-relaxed space-y-4">
-        <div className="grid grid-cols-[4.5rem_1fr] gap-x-4">
-          <span className="text-faint">14:32:06</span>
-          <div>
-            <span className="text-faint uppercase text-[10.5px] tracking-[0.14em]">Themis</span>
-            <p className="text-ink mt-1">
-              You said there was a man near the counter. Tell me everything you remember about him.
-            </p>
-          </div>
-        </div>
-        <div className="grid grid-cols-[4.5rem_1fr] gap-x-4">
-          <span className="text-faint">14:32:41</span>
-          <div>
-            <span className="text-faint uppercase text-[10.5px] tracking-[0.14em]">Witness</span>
-            <p className="text-ink mt-1">
-              He stood close to the register, maybe a metre from it. I could see his hands the
-              whole time.
-            </p>
-          </div>
-        </div>
-        <div className="pt-4 border-t border-line grid grid-cols-[4.5rem_1fr] gap-x-4">
-          <span className="text-accent uppercase text-[10.5px] tracking-[0.14em] pt-0.5">Screen</span>
-          <p className="text-muted text-[12px]">
-            Question passed. No new detail introduced: &quot;the counter&quot; originated with the
-            witness in the free narrative.
-          </p>
-        </div>
-      </div>
-    </figure>
-  );
-}
-
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-paper flex flex-col overflow-x-clip">
@@ -175,11 +133,8 @@ export default function LandingPage() {
                 </div>
               </Reveal>
             </div>
-            <Reveal delay={300} className="hidden lg:block">
-              <Specimen />
-              <p className="text-faint text-xs mt-3">
-                Excerpt from the sample case in the demo workspace.
-              </p>
+            <Reveal delay={300}>
+              <SpecimenReplay />
             </Reveal>
           </div>
         </div>
@@ -356,11 +311,12 @@ export default function LandingPage() {
           <Reveal>
             <div className="max-w-2xl">
               <h2 className="font-serif text-4xl sm:text-5xl tracking-tight">
-                See a complete case in two minutes.
+                Run an interview on yourself.
               </h2>
               <p className="text-muted mt-5 leading-relaxed">
-                The demo workspace contains a full sample case: transcript, analysis,
-                observations, and both reports. You can also run a live interview on yourself.
+                Open the demo workspace, file a case with its own PIN, and take a live
+                interview. Minutes later you have the transcript, the analysis, and both
+                reports, exactly as an investigator would.
               </p>
               <div className="flex flex-col sm:flex-row sm:items-center gap-5 mt-9">
                 <DemoButton className="px-6 py-3 bg-accent hover:bg-accent-hover text-white text-sm font-medium rounded-sm transition-colors text-center disabled:opacity-60" />

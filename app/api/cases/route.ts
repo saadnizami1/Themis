@@ -90,7 +90,7 @@ export async function POST(req: NextRequest) {
     // that will protect this case from other visitors.
     if (!verifyChallenge(challenge?.token, challenge?.answer)) {
       return NextResponse.json(
-        { error: 'Observation check failed or expired. Try it again.' },
+        { error: 'Quick check failed or expired. Please answer it again.' },
         { status: 400 }
       );
     }
