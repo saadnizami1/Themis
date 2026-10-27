@@ -59,9 +59,20 @@ git push -u origin main
    | `SUPABASE_URL` | `https://xjuaomvfhhiyexzttaes.supabase.co` |
    | `SUPABASE_SERVICE_ROLE_KEY` | the `sb_secret_...` key (same as local `.env`) |
    | `NEXTAUTH_SECRET` | `openssl rand -base64 32` (generate a fresh one for prod) |
-   | `NEXTAUTH_URL` | your production URL, e.g. `https://themis.vercel.app` |
+   | `NEXTAUTH_URL` | `https://themis.website` (custom domain, registered at Namecheap; see §4a) |
 
 3. **Deploy.** After the first deploy, set `NEXTAUTH_URL` to the real assigned domain if it differs, and redeploy.
+
+### 4a. Custom domain (themis.website)
+
+`themis.website` (primary) and `www.themis.website` (308 → apex) are attached to the Vercel project. DNS lives at Namecheap (Domain List → Manage → Advanced DNS). Delete the default parking records, then add:
+
+| Type | Host | Value |
+|---|---|---|
+| A | `@` | `76.76.21.21` |
+| CNAME | `www` | `cname.vercel-dns.com.` |
+
+Vercel issues the TLS certificate automatically once DNS resolves. Then set `NEXTAUTH_URL=https://themis.website` and redeploy; `themis-pk.vercel.app` keeps working.
 
 ## 5. Post-deploy checklist
 
